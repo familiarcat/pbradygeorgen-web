@@ -5,9 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@aws-amplify/datastore':
+    specifier: ^4.5.0
+    version: 4.5.0(react-native@0.71.10)
   '@aws-amplify/ui-react':
     specifier: ^5.0.0
-    version: 5.0.0(@types/react@18.2.11)(aws-amplify@5.2.5)(react-dom@18.2.0)(react@18.2.0)
+    version: 5.0.0(@types/react@18.2.11)(aws-amplify@5.2.6)(react-dom@18.2.0)(react@18.2.0)
   '@types/node':
     specifier: 20.3.0
     version: 20.3.0
@@ -17,6 +20,9 @@ dependencies:
   '@types/react-dom':
     specifier: 18.2.4
     version: 18.2.4
+  aws-amplify:
+    specifier: ^5.2.6
+    version: 5.2.6(react-native@0.71.10)
   eslint:
     specifier: 8.42.0
     version: 8.42.0
@@ -32,6 +38,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  styles:
+    specifier: link:@aws-amplify/ui-react/styles
+    version: link:@aws-amplify/ui-react/styles
   typescript:
     specifier: 5.1.3
     version: 5.1.3
@@ -81,12 +90,43 @@ packages:
       - react-native
     dev: false
 
+  /@aws-amplify/api-graphql@3.3.1(react-native@0.71.10):
+    resolution: {integrity: sha512-faVJUc/vwBySmnhch6CThCOoQ4Hw6dVFUM5H6qNtvk1NVLdMWUQq2BV2B7CNKe9l8wL04RIGJaD/7hOdLqHJHA==}
+    dependencies:
+      '@aws-amplify/api-rest': 3.2.1(react-native@0.71.10)
+      '@aws-amplify/auth': 5.4.1(react-native@0.71.10)
+      '@aws-amplify/cache': 5.1.0(react-native@0.71.10)
+      '@aws-amplify/core': 5.4.0(react-native@0.71.10)
+      '@aws-amplify/pubsub': 5.2.1(react-native@0.71.10)
+      graphql: 15.8.0
+      tslib: 1.14.1
+      uuid: 3.4.0
+      zen-observable-ts: 0.8.19
+    transitivePeerDependencies:
+      - debug
+      - encoding
+      - react-native
+    dev: false
+
   /@aws-amplify/api-rest@3.2.0(react-native@0.71.10):
     resolution: {integrity: sha512-xY0FSSmOrHH/xCwFcij64xBJFd+6idMP1ueoNpEwBc8t5jgV9xTmM+Za1FUOlhpImETbqwIlmy6DlVG5IQCDrA==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
       axios: 0.26.0
       tslib: 1.14.1
+    transitivePeerDependencies:
+      - debug
+      - encoding
+      - react-native
+    dev: false
+
+  /@aws-amplify/api-rest@3.2.1(react-native@0.71.10):
+    resolution: {integrity: sha512-GEcxNwCM8r6jg46f1wPR2l8n8tRSKqO5NkD2pJdi8wWDJxY6ieuG2PHTC1zpsHCRKon0p0wiAgayb9ISkEs9Xw==}
+    dependencies:
+      '@aws-amplify/core': 5.4.0(react-native@0.71.10)
+      axios: 0.26.0
+      tslib: 1.14.1
+      url: 0.11.0
     transitivePeerDependencies:
       - debug
       - encoding
@@ -105,12 +145,36 @@ packages:
       - react-native
     dev: false
 
+  /@aws-amplify/api@5.2.1(react-native@0.71.10):
+    resolution: {integrity: sha512-lxH8Aj5PFpf7CYGeHoqWomExwmho5D9ZLnGZD6BH6C8FnxPma55leentStNXm/MMwG288hVQBY1QjIJDxNO2Ag==}
+    dependencies:
+      '@aws-amplify/api-graphql': 3.3.1(react-native@0.71.10)
+      '@aws-amplify/api-rest': 3.2.1(react-native@0.71.10)
+      tslib: 1.14.1
+    transitivePeerDependencies:
+      - debug
+      - encoding
+      - react-native
+    dev: false
+
   /@aws-amplify/auth@5.4.0(react-native@0.71.10):
     resolution: {integrity: sha512-W3CFGV2aXy5+E2egyFYMnLE1oN8VpUXjlBRNWpBu14dWtMxgMNYik6X6rRsjvF3qKVmt+VNct5udRP4hcWl0aw==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
       amazon-cognito-identity-js: 6.2.0
       tslib: 1.14.1
+    transitivePeerDependencies:
+      - encoding
+      - react-native
+    dev: false
+
+  /@aws-amplify/auth@5.4.1(react-native@0.71.10):
+    resolution: {integrity: sha512-+ZbijqBkAMtcIzwZ8zIiR3yFgaJeKbNRqzPI7RIXh7w+5rzJKlXHNXwWJ7m3vIk0XhmQnBw30t0ZrQRQiMs8Vw==}
+    dependencies:
+      '@aws-amplify/core': 5.4.0(react-native@0.71.10)
+      amazon-cognito-identity-js: 6.2.0
+      tslib: 1.14.1
+      url: 0.11.0
     transitivePeerDependencies:
       - encoding
       - react-native
@@ -163,11 +227,31 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/geo@2.0.34(react-native@0.71.10):
-    resolution: {integrity: sha512-ZfGPnVAwRIVFaeX5NyWZ+bdLQrpUg6si8/xa4O8s1oh7ThsROFa4ESnypChd0dlATA1ouLX3+8jEnMiRc3/3qA==}
+  /@aws-amplify/datastore@4.5.1(react-native@0.71.10):
+    resolution: {integrity: sha512-gdeWUzuREhCQ6dd6vpGU7ll2J//z8Ou0Wa+3FKTVwsVCiAg6HCRTgBSiozjZSNLDR8oAfHaBNEhoO6fJByqjXg==}
+    dependencies:
+      '@aws-amplify/api': 5.2.1(react-native@0.71.10)
+      '@aws-amplify/auth': 5.4.1(react-native@0.71.10)
+      '@aws-amplify/core': 5.4.0(react-native@0.71.10)
+      '@aws-amplify/pubsub': 5.2.1(react-native@0.71.10)
+      amazon-cognito-identity-js: 6.2.0
+      idb: 5.0.6
+      immer: 9.0.6
+      ulid: 2.3.0
+      uuid: 3.4.0
+      zen-observable-ts: 0.8.19
+      zen-push: 0.2.1
+    transitivePeerDependencies:
+      - debug
+      - encoding
+      - react-native
+    dev: false
+
+  /@aws-amplify/geo@2.0.35(react-native@0.71.10):
+    resolution: {integrity: sha512-gV5CHubvXBkchjSnCuEY7SnsmCe/CNoJIILqA3m1qOmq+VmI+S4xM7CGuQxKEwAvQImlzjkZa4+9zavQfqkJrQ==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
-      '@aws-sdk/client-location': 3.186.1
+      '@aws-sdk/client-location': 3.186.2
       '@turf/boolean-clockwise': 6.5.0
       camelcase-keys: 6.2.2
       tslib: 1.14.1
@@ -177,12 +261,12 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/interactions@5.1.0(react-native@0.71.10):
-    resolution: {integrity: sha512-jzEPhwmSGpJ+h+a7cQCjUOmdtN5xpMvyQKCF39YMzMcg4UB4jdvOuOi2+HudnypsbGCVxfE5lD1rqbgzRZkz+w==}
+  /@aws-amplify/interactions@5.1.1(react-native@0.71.10):
+    resolution: {integrity: sha512-hGcu8bQEo1XGbouxjbpTBMg+6F8yaSY1q7OPCYGzhFZjXU0mdE0XRWlTzxSeIOxpRg8X9IoGHGiamNF6ZA156A==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
-      '@aws-sdk/client-lex-runtime-service': 3.186.1
-      '@aws-sdk/client-lex-runtime-v2': 3.186.1
+      '@aws-sdk/client-lex-runtime-service': 3.186.2
+      '@aws-sdk/client-lex-runtime-v2': 3.186.2
       base-64: 1.0.0
       fflate: 0.7.3
       pako: 2.0.4
@@ -206,11 +290,11 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/predictions@5.2.2(react-native@0.71.10):
-    resolution: {integrity: sha512-W5QlvAJ6IY6u5AxznSy/TxJmhLVsvO3GlKYI3X3QDnylMnf4cHROK41i7f3Z8EqpJ3IvUPezsstINVryREoQkA==}
+  /@aws-amplify/predictions@5.2.3(react-native@0.71.10):
+    resolution: {integrity: sha512-nbPHIxrA1LKXY9EJf1P+Nn3a8SLk+ooyZBnWtnI8h0o5Pw4F89xZNZ3P6Z1NJKWZ6xynJS6W078RwlxDHKDwrw==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
-      '@aws-amplify/storage': 5.4.0(react-native@0.71.10)
+      '@aws-amplify/storage': 5.4.1(react-native@0.71.10)
       '@aws-sdk/client-comprehend': 3.6.1(react-native@0.71.10)
       '@aws-sdk/client-polly': 3.6.1(react-native@0.71.10)
       '@aws-sdk/client-rekognition': 3.6.1(react-native@0.71.10)
@@ -242,15 +326,31 @@ packages:
       - react-native
     dev: false
 
+  /@aws-amplify/pubsub@5.2.1(react-native@0.71.10):
+    resolution: {integrity: sha512-6bHjXBT6SqWs5A8mh4qSNtuG1OxysmEm8lQLyp94n6rUepkZ9b7yM9tBNcQs1fJQoOHe09h4zAQeFuontK7+5g==}
+    dependencies:
+      '@aws-amplify/auth': 5.4.1(react-native@0.71.10)
+      '@aws-amplify/cache': 5.1.0(react-native@0.71.10)
+      '@aws-amplify/core': 5.4.0(react-native@0.71.10)
+      graphql: 15.8.0
+      tslib: 1.14.1
+      url: 0.11.0
+      uuid: 3.4.0
+      zen-observable-ts: 0.8.19
+    transitivePeerDependencies:
+      - encoding
+      - react-native
+    dev: false
+
   /@aws-amplify/rtn-push-notification@1.1.1:
     resolution: {integrity: sha512-uYPyiNeK2r2g82U6ayluNrKA2z5280mlW9razEul94i/2XPt9LAXhIb1XnCtxGzxANMHd+FH9V7D7RAGK99pTQ==}
     dev: false
 
-  /@aws-amplify/storage@5.4.0(react-native@0.71.10):
-    resolution: {integrity: sha512-wXGxVhzNgvQJVO1nScJe6xdPUfZuu9//Uqm3WYjrkbZ/oFgS3uZOqYUJkoc4KNOiReB82resyxunJvrUj0L96Q==}
+  /@aws-amplify/storage@5.4.1(react-native@0.71.10):
+    resolution: {integrity: sha512-b116Hp+nUmbev19ojN34mBQyJ50xW6hnUlnKjBrAFVAooaXzZzYbKoCHthF87YS2CblBlLWcGAzcZiD//KoL1Q==}
     dependencies:
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
-      '@aws-sdk/client-s3': 3.6.2(react-native@0.71.10)
+      '@aws-sdk/client-s3': 3.6.3(react-native@0.71.10)
       '@aws-sdk/s3-request-presigner': 3.6.1
       '@aws-sdk/util-create-request': 3.6.1
       '@aws-sdk/util-format-url': 3.6.1
@@ -263,15 +363,15 @@ packages:
       - react-native
     dev: false
 
-  /@aws-amplify/ui-react-core@2.1.23(@types/react@18.2.11)(aws-amplify@5.2.5)(react@18.2.0):
+  /@aws-amplify/ui-react-core@2.1.23(@types/react@18.2.11)(aws-amplify@5.2.6)(react@18.2.0):
     resolution: {integrity: sha512-qKoPcLpKpniwlji0mTiTXdwOdFSTD/LO//T5iLsE+uyu/BzsEFpbznl/XdRsCbHrtLDrMlygf25OczTLPNQtQg==}
     peerDependencies:
       aws-amplify: '>= 5.0.1'
       react: '>= 16.14.0'
     dependencies:
-      '@aws-amplify/ui': 5.6.4(aws-amplify@5.2.5)(xstate@4.37.2)
+      '@aws-amplify/ui': 5.6.4(aws-amplify@5.2.6)(xstate@4.37.2)
       '@xstate/react': 3.0.1(@types/react@18.2.11)(react@18.2.0)(xstate@4.37.2)
-      aws-amplify: 5.2.5(react-native@0.71.10)
+      aws-amplify: 5.2.6(react-native@0.71.10)
       lodash: 4.17.21
       react: 18.2.0
       xstate: 4.37.2
@@ -280,7 +380,7 @@ packages:
       - '@xstate/fsm'
     dev: false
 
-  /@aws-amplify/ui-react@5.0.0(@types/react@18.2.11)(aws-amplify@5.2.5)(react-dom@18.2.0)(react@18.2.0):
+  /@aws-amplify/ui-react@5.0.0(@types/react@18.2.11)(aws-amplify@5.2.6)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-70o6sRKB/xUqGgbDsMJimkRBny+L7OQ+cAAc5vmVMLtjS++imeYwlrN6eAoL72ozcOKLnpwzIX7AVZeU5j6f+A==}
     peerDependencies:
       aws-amplify: '>= 5.0.1'
@@ -290,15 +390,15 @@ packages:
       aws-amplify:
         optional: true
     dependencies:
-      '@aws-amplify/ui': 5.6.4(aws-amplify@5.2.5)(xstate@4.37.2)
-      '@aws-amplify/ui-react-core': 2.1.23(@types/react@18.2.11)(aws-amplify@5.2.5)(react@18.2.0)
+      '@aws-amplify/ui': 5.6.4(aws-amplify@5.2.6)(xstate@4.37.2)
+      '@aws-amplify/ui-react-core': 2.1.23(@types/react@18.2.11)(aws-amplify@5.2.6)(react@18.2.0)
       '@radix-ui/react-accordion': 1.0.0(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-direction': 1.0.0(react@18.2.0)
       '@radix-ui/react-dropdown-menu': 1.0.0(@types/react@18.2.11)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-slider': 1.0.0(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-tabs': 1.0.0(react-dom@18.2.0)(react@18.2.0)
       '@xstate/react': 3.0.0(@types/react@18.2.11)(react@18.2.0)
-      aws-amplify: 5.2.5(react-native@0.71.10)
+      aws-amplify: 5.2.6(react-native@0.71.10)
       classnames: 2.3.1
       deepmerge: 4.2.2
       lodash: 4.17.21
@@ -313,7 +413,7 @@ packages:
       - xstate
     dev: false
 
-  /@aws-amplify/ui@5.6.4(aws-amplify@5.2.5)(xstate@4.37.2):
+  /@aws-amplify/ui@5.6.4(aws-amplify@5.2.6)(xstate@4.37.2):
     resolution: {integrity: sha512-6xXHWMMZ9OGNcRq/FoW8KrHC5dsX841O/fOeFDi5a7aHLPTqGdc9PNLFjzrlaqAQT6Sj9QMfCPAJcLT6UcUG3g==}
     peerDependencies:
       aws-amplify: '>= 5.0.1'
@@ -322,7 +422,7 @@ packages:
       xstate:
         optional: true
     dependencies:
-      aws-amplify: 5.2.5(react-native@0.71.10)
+      aws-amplify: 5.2.6(react-native@0.71.10)
       csstype: 3.1.2
       lodash: 4.17.21
       style-dictionary: 3.7.1
@@ -334,7 +434,7 @@ packages:
     resolution: {integrity: sha512-8K0b1672qbv05chSoKpwGZ3fhvVp28Fg3AVHVkEHFl2lTLChO7wD/hTyyo8ING7uc31uZRt7bNra/hA74Td7Tw==}
     dependencies:
       '@aws-crypto/util': 1.2.2
-      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/types': 3.186.0
       tslib: 1.14.1
     dev: false
 
@@ -365,7 +465,7 @@ packages:
       '@aws-crypto/sha256-js': 1.2.2
       '@aws-crypto/supports-web-crypto': 1.0.0
       '@aws-crypto/util': 1.2.2
-      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/types': 3.186.0
       '@aws-sdk/util-locate-window': 3.310.0
       tslib: 1.14.1
     dev: false
@@ -379,7 +479,7 @@ packages:
       '@aws-crypto/util': 2.0.2
       '@aws-sdk/types': 3.186.0
       '@aws-sdk/util-locate-window': 3.310.0
-      '@aws-sdk/util-utf8-browser': 3.186.0
+      '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false
 
@@ -387,7 +487,7 @@ packages:
     resolution: {integrity: sha512-Nr1QJIbW/afYYGzYvrF70LtaHrIRtd4TNAglX8BvlfxJLZ45SAmueIKYl5tWoNBPzp65ymXGFK0Bb1vZUpuc9g==}
     dependencies:
       '@aws-crypto/util': 1.2.2
-      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/types': 3.186.0
       tslib: 1.14.1
     dev: false
 
@@ -414,7 +514,7 @@ packages:
   /@aws-crypto/util@1.2.2:
     resolution: {integrity: sha512-H8PjG5WJ4wz0UXAFXeJjWCW1vkvIJ3qUUD+rGRwJ2/hj+xT58Qle2MTql/2MGzkU+1JLAFuR6aJpLAjHwhmwwg==}
     dependencies:
-      '@aws-sdk/types': 3.6.1
+      '@aws-sdk/types': 3.186.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false
@@ -423,7 +523,7 @@ packages:
     resolution: {integrity: sha512-Lgu5v/0e/BcrZ5m/IWqzPUf3UYFTy/PpeED+uc9SWUR1iZQL8XXbGQg10UfllwwBryO3hFF5dizK+78aoXC1eA==}
     dependencies:
       '@aws-sdk/types': 3.186.0
-      '@aws-sdk/util-utf8-browser': 3.186.0
+      '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false
 
@@ -617,13 +717,13 @@ packages:
       - react-native
     dev: false
 
-  /@aws-sdk/client-lex-runtime-service@3.186.1:
-    resolution: {integrity: sha512-WlFKLERQ4L0Gf8Td6Uu8H6lV4+NYHc45lfo8+gouyr9/2XiAzgQJagg2NsPa6cwDFOi/dUFH3XIIqU1XNqvCUA==}
+  /@aws-sdk/client-lex-runtime-service@3.186.2:
+    resolution: {integrity: sha512-UzIDdbz04SxjQbUZJCSoDkKMfzfmi4QsoCBL52vdqB6wOW26yQvwxqJcXsSfGgD7YbEKJhlLb1dncFuSGUMuEQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 2.0.0
       '@aws-crypto/sha256-js': 2.0.0
-      '@aws-sdk/client-sts': 3.186.1
+      '@aws-sdk/client-sts': 3.186.2
       '@aws-sdk/config-resolver': 3.186.0
       '@aws-sdk/credential-provider-node': 3.186.0
       '@aws-sdk/fetch-http-handler': 3.186.0
@@ -659,13 +759,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lex-runtime-v2@3.186.1:
-    resolution: {integrity: sha512-0KG6neh/HB8zVdeGRT/UHzcvoYqNMiZI2+FFwdpNDPtlqmwCWBaGJdCda2rIXix6Iz4mFu5gWjr9/fI88YBCCw==}
+  /@aws-sdk/client-lex-runtime-v2@3.186.2:
+    resolution: {integrity: sha512-OUO3wclrJIHNoczrCaTYnOhDayPNiz270I4jrOKORddepOeawbqmUZBIVeQh1JaL6/qlKz1ZId/zazBf2Mgcsw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 2.0.0
       '@aws-crypto/sha256-js': 2.0.0
-      '@aws-sdk/client-sts': 3.186.1
+      '@aws-sdk/client-sts': 3.186.2
       '@aws-sdk/config-resolver': 3.186.0
       '@aws-sdk/credential-provider-node': 3.186.0
       '@aws-sdk/eventstream-handler-node': 3.186.0
@@ -706,13 +806,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-location@3.186.1:
-    resolution: {integrity: sha512-1wRt91iHkcbG5fOztGyO0t9THugezYJEzHAJuqZqxN9pbRv6WTtrHICaHNXeLhHft2l9thg9XVuSlL1obqkjMg==}
+  /@aws-sdk/client-location@3.186.2:
+    resolution: {integrity: sha512-pjuwqfibyfkVOXbTaHzO4zNb/3NamlA/R+R8UvMex3NtxsDAWgqM3B9cYa2/Auqhzk+Wc/bhrz8FBskSEgdfWg==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 2.0.0
       '@aws-crypto/sha256-js': 2.0.0
-      '@aws-sdk/client-sts': 3.186.1
+      '@aws-sdk/client-sts': 3.186.2
       '@aws-sdk/config-resolver': 3.186.0
       '@aws-sdk/credential-provider-node': 3.186.0
       '@aws-sdk/fetch-http-handler': 3.186.0
@@ -866,8 +966,8 @@ packages:
       - react-native
     dev: false
 
-  /@aws-sdk/client-s3@3.6.2(react-native@0.71.10):
-    resolution: {integrity: sha512-gGMFW+sy/VCr6tCwPmfvH4OuIsN10AHEwP6OTdrM2JJ6Uj/te2LRlksrNbPfPiuxF+tS8p7YReSNsiH8yw5XLw==}
+  /@aws-sdk/client-s3@3.6.3(react-native@0.71.10):
+    resolution: {integrity: sha512-nDcz/vyQ+otYjt9AetCWw9X4Ii4sdKOxmBJA06bLufzaWeGyYzVT3oY9o+9GywUXMEkz6vFVeKDZuSptt3aycA==}
     engines: {node: '>=10.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 1.2.2
@@ -914,7 +1014,7 @@ packages:
       '@aws-sdk/util-utf8-node': 3.6.1
       '@aws-sdk/util-waiter': 3.6.1
       '@aws-sdk/xml-builder': 3.6.1
-      fast-xml-parser: 4.1.3
+      fast-xml-parser: 4.2.4
       tslib: 2.5.3
     transitivePeerDependencies:
       - react-native
@@ -959,8 +1059,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sts@3.186.1:
-    resolution: {integrity: sha512-2LTEmXtlat2PyC77bGojB8xu97C4o7Q3czHW+UcNO3LfZn2MTtPe5pSLeUGlcxC7Euc9PJoNCa/F7+9dzkveqg==}
+  /@aws-sdk/client-sts@3.186.2:
+    resolution: {integrity: sha512-v58K2uVt7Yy980cCMCWKnNiTL3WAP0a82rI4p/eisc0i6WmXNguUtR+F4FyFlhJtHogjV7Uj4MSoI/qPwT2unA==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 2.0.0
@@ -997,7 +1097,7 @@ packages:
       '@aws-sdk/util-utf8-browser': 3.186.0
       '@aws-sdk/util-utf8-node': 3.186.0
       entities: 2.2.0
-      fast-xml-parser: 4.1.3
+      fast-xml-parser: 4.2.4
       tslib: 2.5.3
     transitivePeerDependencies:
       - aws-crt
@@ -5039,21 +5139,21 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /aws-amplify@5.2.5(react-native@0.71.10):
-    resolution: {integrity: sha512-GlT2ELeWqGAqRdsnMrYh1O8LYBP7LbcRNdbUmchhmOJ88TcAr5fcXS8qrMsrcKetcMoU/J0wgVuNoda2evLgaw==}
+  /aws-amplify@5.2.6(react-native@0.71.10):
+    resolution: {integrity: sha512-Xz3IpvCYrnVbp4AdPOhUuqibDPcZWRrHfuKrbhOme4VjEiUVeEyIZbj/4MEZwteeLFZ1MNYSaEMpyzi+9dwSQQ==}
     dependencies:
       '@aws-amplify/analytics': 6.2.0(react-native@0.71.10)
-      '@aws-amplify/api': 5.2.0(react-native@0.71.10)
-      '@aws-amplify/auth': 5.4.0(react-native@0.71.10)
+      '@aws-amplify/api': 5.2.1(react-native@0.71.10)
+      '@aws-amplify/auth': 5.4.1(react-native@0.71.10)
       '@aws-amplify/cache': 5.1.0(react-native@0.71.10)
       '@aws-amplify/core': 5.4.0(react-native@0.71.10)
-      '@aws-amplify/datastore': 4.5.0(react-native@0.71.10)
-      '@aws-amplify/geo': 2.0.34(react-native@0.71.10)
-      '@aws-amplify/interactions': 5.1.0(react-native@0.71.10)
+      '@aws-amplify/datastore': 4.5.1(react-native@0.71.10)
+      '@aws-amplify/geo': 2.0.35(react-native@0.71.10)
+      '@aws-amplify/interactions': 5.1.1(react-native@0.71.10)
       '@aws-amplify/notifications': 1.2.0(react-native@0.71.10)
-      '@aws-amplify/predictions': 5.2.2(react-native@0.71.10)
-      '@aws-amplify/pubsub': 5.2.0(react-native@0.71.10)
-      '@aws-amplify/storage': 5.4.0(react-native@0.71.10)
+      '@aws-amplify/predictions': 5.2.3(react-native@0.71.10)
+      '@aws-amplify/pubsub': 5.2.1(react-native@0.71.10)
+      '@aws-amplify/storage': 5.4.1(react-native@0.71.10)
       tslib: 2.5.3
     transitivePeerDependencies:
       - aws-crt
@@ -6447,13 +6547,6 @@ packages:
 
   /fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
-    dev: false
-
-  /fast-xml-parser@4.1.3:
-    resolution: {integrity: sha512-LsNDahCiCcJPe8NO7HijcnukHB24tKbfDDA5IILx9dmW3Frb52lhbeX6MPNUSvyGNfav2VTYpJ/OqkRoVLrh2Q==}
-    hasBin: true
-    dependencies:
-      strnum: 1.0.5
     dev: false
 
   /fast-xml-parser@4.2.4:
@@ -8834,6 +8927,10 @@ packages:
       once: 1.4.0
     dev: false
 
+  /punycode@1.3.2:
+    resolution: {integrity: sha512-RofWgt/7fL5wP1Y7fxE7/EmTLzQVnB0ycyibJ0OOHIlJqTNzglYFxVwETOcIoJqJmpDXJ9xImDv+Fq34F/d4Dw==}
+    dev: false
+
   /punycode@1.4.1:
     resolution: {integrity: sha512-jmYNElW7yvO7TV33CjSmvSiE2yco3bV2czu/OzDKdMNVZQWfxCblURLhf+47syQRBntjfLdd/H0egrzIG+oaFQ==}
     dev: false
@@ -8859,6 +8956,12 @@ packages:
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
+    dev: false
+
+  /querystring@0.2.0:
+    resolution: {integrity: sha512-X/xY82scca2tau62i9mDyU9K+I+djTMUsvwf7xnUX5GLvVzgJybOJf4Y6o9Zx3oJK/LSXg5tTZBjwzqVPaPO2g==}
+    engines: {node: '>=0.4.x'}
+    deprecated: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
     dev: false
 
   /queue-microtask@1.2.3:
@@ -9048,7 +9151,7 @@ packages:
     dependencies:
       object-assign: 4.1.1
       react: 18.2.0
-      react-is: 16.13.1
+      react-is: 18.2.0
     dev: false
 
   /react-style-singleton@2.2.1(@types/react@18.2.11)(react@18.2.0):
@@ -10068,6 +10171,13 @@ packages:
   /urix@0.1.0:
     resolution: {integrity: sha512-Am1ousAhSLBeB9cG/7k7r2R0zj50uDRlZHPGbazid5s9rlF1F/QKYObEKSIunSjIOkJZqwRRLpvewjEkM7pSqg==}
     deprecated: Please see https://github.com/lydell/urix#deprecated
+    dev: false
+
+  /url@0.11.0:
+    resolution: {integrity: sha512-kbailJa29QrtXnxgq+DdCEGlbTeYM2eJUxsz6vjZavrCYPMIFHMKQmSKYAIuUK2i7hgPm28a8piX5NTUtM/LKQ==}
+    dependencies:
+      punycode: 1.3.2
+      querystring: 0.2.0
     dev: false
 
   /url@0.11.1:

@@ -33,7 +33,6 @@ export { default as CommentCard } from "./CommentCard";
 export { default as ReviewCard } from "./ReviewCard";
 export { default as HeroLayout3 } from "./HeroLayout3";
 export { default as studioTheme } from "./studioTheme";
-export { default as Resume } from "./Resume";
 export { default as ResumeCreateForm } from "./ResumeCreateForm";
 export { default as ResumeUpdateForm } from "./ResumeUpdateForm";
 export { default as SummaryCreateForm } from "./SummaryCreateForm";
