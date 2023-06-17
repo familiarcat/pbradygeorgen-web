@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Degree } from "../models";
+import { School } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -15,17 +15,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type EducationCreateFormInputValues = {
     summary?: string;
-    Degrees?: Degree[];
+    Schools?: School[];
 };
 export declare type EducationCreateFormValidationValues = {
     summary?: ValidationFunction<string>;
-    Degrees?: ValidationFunction<Degree>;
+    Schools?: ValidationFunction<School>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type EducationCreateFormOverridesProps = {
     EducationCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     summary?: PrimitiveOverrideProps<TextFieldProps>;
-    Degrees?: PrimitiveOverrideProps<AutocompleteProps>;
+    Schools?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type EducationCreateFormProps = React.PropsWithChildren<{
     overrides?: EducationCreateFormOverridesProps | undefined | null;

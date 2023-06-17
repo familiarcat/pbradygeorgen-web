@@ -23,7 +23,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Engagement, Skill, Company } from "../models";
+import { Engagement, Accomplishment, Company } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -201,13 +201,15 @@ export default function EngagementUpdateForm(props) {
     startDate: "",
     endDate: "",
     companyID: undefined,
-    Skills: [],
+    Accomplishments: [],
   };
   const [client, setClient] = React.useState(initialValues.client);
   const [startDate, setStartDate] = React.useState(initialValues.startDate);
   const [endDate, setEndDate] = React.useState(initialValues.endDate);
   const [companyID, setCompanyID] = React.useState(initialValues.companyID);
-  const [Skills, setSkills] = React.useState(initialValues.Skills);
+  const [Accomplishments, setAccomplishments] = React.useState(
+    initialValues.Accomplishments
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = engagementRecord
@@ -215,7 +217,7 @@ export default function EngagementUpdateForm(props) {
           ...initialValues,
           ...engagementRecord,
           companyID,
-          Skills: linkedSkills,
+          Accomplishments: linkedAccomplishments,
         }
       : initialValues;
     setClient(cleanValues.client);
@@ -224,15 +226,15 @@ export default function EngagementUpdateForm(props) {
     setCompanyID(cleanValues.companyID);
     setCurrentCompanyIDValue(undefined);
     setCurrentCompanyIDDisplayValue("");
-    setSkills(cleanValues.Skills ?? []);
-    setCurrentSkillsValue(undefined);
-    setCurrentSkillsDisplayValue("");
+    setAccomplishments(cleanValues.Accomplishments ?? []);
+    setCurrentAccomplishmentsValue(undefined);
+    setCurrentAccomplishmentsDisplayValue("");
     setErrors({});
   };
   const [engagementRecord, setEngagementRecord] =
     React.useState(engagementModelProp);
-  const [linkedSkills, setLinkedSkills] = React.useState([]);
-  const canUnlinkSkills = false;
+  const [linkedAccomplishments, setLinkedAccomplishments] = React.useState([]);
+  const canUnlinkAccomplishments = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
@@ -241,51 +243,56 @@ export default function EngagementUpdateForm(props) {
       setEngagementRecord(record);
       const companyIDRecord = record ? await record.companyID : undefined;
       setCompanyID(companyIDRecord);
-      const linkedSkills = record ? await record.Skills.toArray() : [];
-      setLinkedSkills(linkedSkills);
+      const linkedAccomplishments = record
+        ? await record.Accomplishments.toArray()
+        : [];
+      setLinkedAccomplishments(linkedAccomplishments);
     };
     queryData();
   }, [idProp, engagementModelProp]);
   React.useEffect(resetStateValues, [
     engagementRecord,
     companyID,
-    linkedSkills,
+    linkedAccomplishments,
   ]);
   const [currentCompanyIDDisplayValue, setCurrentCompanyIDDisplayValue] =
     React.useState("");
   const [currentCompanyIDValue, setCurrentCompanyIDValue] =
     React.useState(undefined);
   const companyIDRef = React.createRef();
-  const [currentSkillsDisplayValue, setCurrentSkillsDisplayValue] =
-    React.useState("");
-  const [currentSkillsValue, setCurrentSkillsValue] = React.useState(undefined);
-  const SkillsRef = React.createRef();
+  const [
+    currentAccomplishmentsDisplayValue,
+    setCurrentAccomplishmentsDisplayValue,
+  ] = React.useState("");
+  const [currentAccomplishmentsValue, setCurrentAccomplishmentsValue] =
+    React.useState(undefined);
+  const AccomplishmentsRef = React.createRef();
   const getIDValue = {
-    Skills: (r) => JSON.stringify({ id: r?.id }),
+    Accomplishments: (r) => JSON.stringify({ id: r?.id }),
   };
-  const SkillsIdSet = new Set(
-    Array.isArray(Skills)
-      ? Skills.map((r) => getIDValue.Skills?.(r))
-      : getIDValue.Skills?.(Skills)
+  const AccomplishmentsIdSet = new Set(
+    Array.isArray(Accomplishments)
+      ? Accomplishments.map((r) => getIDValue.Accomplishments?.(r))
+      : getIDValue.Accomplishments?.(Accomplishments)
   );
   const companyRecords = useDataStoreBinding({
     type: "collection",
     model: Company,
   }).items;
-  const skillRecords = useDataStoreBinding({
+  const accomplishmentRecords = useDataStoreBinding({
     type: "collection",
-    model: Skill,
+    model: Accomplishment,
   }).items;
   const getDisplayValue = {
     companyID: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
-    Skills: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
+    Accomplishments: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
   };
   const validations = {
     client: [],
     startDate: [],
     endDate: [],
     companyID: [{ type: "Required" }],
-    Skills: [],
+    Accomplishments: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -317,7 +324,7 @@ export default function EngagementUpdateForm(props) {
           startDate,
           endDate,
           companyID,
-          Skills,
+          Accomplishments,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -356,42 +363,46 @@ export default function EngagementUpdateForm(props) {
             }
           });
           const promises = [];
-          const skillsToLink = [];
-          const skillsToUnLink = [];
-          const skillsSet = new Set();
-          const linkedSkillsSet = new Set();
-          Skills.forEach((r) => skillsSet.add(getIDValue.Skills?.(r)));
-          linkedSkills.forEach((r) =>
-            linkedSkillsSet.add(getIDValue.Skills?.(r))
+          const accomplishmentsToLink = [];
+          const accomplishmentsToUnLink = [];
+          const accomplishmentsSet = new Set();
+          const linkedAccomplishmentsSet = new Set();
+          Accomplishments.forEach((r) =>
+            accomplishmentsSet.add(getIDValue.Accomplishments?.(r))
           );
-          linkedSkills.forEach((r) => {
-            if (!skillsSet.has(getIDValue.Skills?.(r))) {
-              skillsToUnLink.push(r);
+          linkedAccomplishments.forEach((r) =>
+            linkedAccomplishmentsSet.add(getIDValue.Accomplishments?.(r))
+          );
+          linkedAccomplishments.forEach((r) => {
+            if (!accomplishmentsSet.has(getIDValue.Accomplishments?.(r))) {
+              accomplishmentsToUnLink.push(r);
             }
           });
-          Skills.forEach((r) => {
-            if (!linkedSkillsSet.has(getIDValue.Skills?.(r))) {
-              skillsToLink.push(r);
+          Accomplishments.forEach((r) => {
+            if (
+              !linkedAccomplishmentsSet.has(getIDValue.Accomplishments?.(r))
+            ) {
+              accomplishmentsToLink.push(r);
             }
           });
-          skillsToUnLink.forEach((original) => {
-            if (!canUnlinkSkills) {
+          accomplishmentsToUnLink.forEach((original) => {
+            if (!canUnlinkAccomplishments) {
               throw Error(
-                `Skill ${original.id} cannot be unlinked from Engagement because engagementID is a required field.`
+                `Accomplishment ${original.id} cannot be unlinked from Engagement because engagementID is a required field.`
               );
             }
             promises.push(
               DataStore.save(
-                Skill.copyOf(original, (updated) => {
+                Accomplishment.copyOf(original, (updated) => {
                   updated.engagementID = null;
                 })
               )
             );
           });
-          skillsToLink.forEach((original) => {
+          accomplishmentsToLink.forEach((original) => {
             promises.push(
               DataStore.save(
-                Skill.copyOf(original, (updated) => {
+                Accomplishment.copyOf(original, (updated) => {
                   updated.engagementID = engagementRecord.id;
                 })
               )
@@ -436,7 +447,7 @@ export default function EngagementUpdateForm(props) {
               startDate,
               endDate,
               companyID,
-              Skills,
+              Accomplishments,
             };
             const result = onChange(modelFields);
             value = result?.client ?? value;
@@ -465,7 +476,7 @@ export default function EngagementUpdateForm(props) {
               startDate: value,
               endDate,
               companyID,
-              Skills,
+              Accomplishments,
             };
             const result = onChange(modelFields);
             value = result?.startDate ?? value;
@@ -494,7 +505,7 @@ export default function EngagementUpdateForm(props) {
               startDate,
               endDate: value,
               companyID,
-              Skills,
+              Accomplishments,
             };
             const result = onChange(modelFields);
             value = result?.endDate ?? value;
@@ -519,7 +530,7 @@ export default function EngagementUpdateForm(props) {
               startDate,
               endDate,
               companyID: value,
-              Skills,
+              Accomplishments,
             };
             const result = onChange(modelFields);
             value = result?.companyID ?? value;
@@ -595,68 +606,77 @@ export default function EngagementUpdateForm(props) {
               startDate,
               endDate,
               companyID,
-              Skills: values,
+              Accomplishments: values,
             };
             const result = onChange(modelFields);
-            values = result?.Skills ?? values;
+            values = result?.Accomplishments ?? values;
           }
-          setSkills(values);
-          setCurrentSkillsValue(undefined);
-          setCurrentSkillsDisplayValue("");
+          setAccomplishments(values);
+          setCurrentAccomplishmentsValue(undefined);
+          setCurrentAccomplishmentsDisplayValue("");
         }}
-        currentFieldValue={currentSkillsValue}
-        label={"Skills"}
-        items={Skills}
-        hasError={errors?.Skills?.hasError}
-        errorMessage={errors?.Skills?.errorMessage}
-        getBadgeText={getDisplayValue.Skills}
+        currentFieldValue={currentAccomplishmentsValue}
+        label={"Accomplishments"}
+        items={Accomplishments}
+        hasError={errors?.Accomplishments?.hasError}
+        errorMessage={errors?.Accomplishments?.errorMessage}
+        getBadgeText={getDisplayValue.Accomplishments}
         setFieldValue={(model) => {
-          setCurrentSkillsDisplayValue(getDisplayValue.Skills(model));
-          setCurrentSkillsValue(model);
+          setCurrentAccomplishmentsDisplayValue(
+            getDisplayValue.Accomplishments(model)
+          );
+          setCurrentAccomplishmentsValue(model);
         }}
-        inputFieldRef={SkillsRef}
+        inputFieldRef={AccomplishmentsRef}
         defaultFieldValue={""}
       >
         <Autocomplete
-          label="Skills"
+          label="Accomplishments"
           isRequired={false}
           isReadOnly={false}
-          placeholder="Search Skill"
-          value={currentSkillsDisplayValue}
-          options={skillRecords
-            .filter((r) => !SkillsIdSet.has(getIDValue.Skills?.(r)))
+          placeholder="Search Accomplishment"
+          value={currentAccomplishmentsDisplayValue}
+          options={accomplishmentRecords
+            .filter(
+              (r) => !AccomplishmentsIdSet.has(getIDValue.Accomplishments?.(r))
+            )
             .map((r) => ({
-              id: getIDValue.Skills?.(r),
-              label: getDisplayValue.Skills?.(r),
+              id: getIDValue.Accomplishments?.(r),
+              label: getDisplayValue.Accomplishments?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentSkillsValue(
-              skillRecords.find((r) =>
+            setCurrentAccomplishmentsValue(
+              accomplishmentRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
               )
             );
-            setCurrentSkillsDisplayValue(label);
-            runValidationTasks("Skills", label);
+            setCurrentAccomplishmentsDisplayValue(label);
+            runValidationTasks("Accomplishments", label);
           }}
           onClear={() => {
-            setCurrentSkillsDisplayValue("");
+            setCurrentAccomplishmentsDisplayValue("");
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.Skills?.hasError) {
-              runValidationTasks("Skills", value);
+            if (errors.Accomplishments?.hasError) {
+              runValidationTasks("Accomplishments", value);
             }
-            setCurrentSkillsDisplayValue(value);
-            setCurrentSkillsValue(undefined);
+            setCurrentAccomplishmentsDisplayValue(value);
+            setCurrentAccomplishmentsValue(undefined);
           }}
-          onBlur={() => runValidationTasks("Skills", currentSkillsDisplayValue)}
-          errorMessage={errors.Skills?.errorMessage}
-          hasError={errors.Skills?.hasError}
-          ref={SkillsRef}
+          onBlur={() =>
+            runValidationTasks(
+              "Accomplishments",
+              currentAccomplishmentsDisplayValue
+            )
+          }
+          errorMessage={errors.Accomplishments?.errorMessage}
+          hasError={errors.Accomplishments?.hasError}
+          ref={AccomplishmentsRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "Skills")}
+          {...getOverrideProps(overrides, "Accomplishments")}
         ></Autocomplete>
       </ArrayField>
       <Flex

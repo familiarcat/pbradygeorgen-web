@@ -4,17 +4,18 @@ import { schema } from './schema';
 
 
 
-const { Resume, Summary, Education, School, Experience, Degree, Engagement, Company, Skill, Accomplishment } = initSchema(schema);
+const { ContactInformation, Resume, Education, Degree, Company, Accomplishment, School, Experience, Skill, Engagement, Summary } = initSchema(schema);
 
 export {
+  ContactInformation,
   Resume,
-  Summary,
   Education,
+  Degree,
+  Company,
+  Accomplishment,
   School,
   Experience,
-  Degree,
-  Engagement,
-  Company,
   Skill,
-  Accomplishment
+  Engagement,
+  Summary
 };

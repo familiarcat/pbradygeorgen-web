@@ -23,7 +23,13 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Company, Engagement, Accomplishment, Experience } from "../models";
+import {
+  Company,
+  Engagement,
+  Accomplishment,
+  Skill,
+  Experience,
+} from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -203,6 +209,7 @@ export default function CompanyCreateForm(props) {
     historyID: undefined,
     Engagements: [],
     Accomplishments: [],
+    Skills: [],
   };
   const [title, setTitle] = React.useState(initialValues.title);
   const [role, setRole] = React.useState(initialValues.role);
@@ -215,6 +222,7 @@ export default function CompanyCreateForm(props) {
   const [Accomplishments, setAccomplishments] = React.useState(
     initialValues.Accomplishments
   );
+  const [Skills, setSkills] = React.useState(initialValues.Skills);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setTitle(initialValues.title);
@@ -230,6 +238,9 @@ export default function CompanyCreateForm(props) {
     setAccomplishments(initialValues.Accomplishments);
     setCurrentAccomplishmentsValue(undefined);
     setCurrentAccomplishmentsDisplayValue("");
+    setSkills(initialValues.Skills);
+    setCurrentSkillsValue(undefined);
+    setCurrentSkillsDisplayValue("");
     setErrors({});
   };
   const [currentHistoryIDDisplayValue, setCurrentHistoryIDDisplayValue] =
@@ -249,9 +260,14 @@ export default function CompanyCreateForm(props) {
   const [currentAccomplishmentsValue, setCurrentAccomplishmentsValue] =
     React.useState(undefined);
   const AccomplishmentsRef = React.createRef();
+  const [currentSkillsDisplayValue, setCurrentSkillsDisplayValue] =
+    React.useState("");
+  const [currentSkillsValue, setCurrentSkillsValue] = React.useState(undefined);
+  const SkillsRef = React.createRef();
   const getIDValue = {
     Engagements: (r) => JSON.stringify({ id: r?.id }),
     Accomplishments: (r) => JSON.stringify({ id: r?.id }),
+    Skills: (r) => JSON.stringify({ id: r?.id }),
   };
   const EngagementsIdSet = new Set(
     Array.isArray(Engagements)
@@ -262,6 +278,11 @@ export default function CompanyCreateForm(props) {
     Array.isArray(Accomplishments)
       ? Accomplishments.map((r) => getIDValue.Accomplishments?.(r))
       : getIDValue.Accomplishments?.(Accomplishments)
+  );
+  const SkillsIdSet = new Set(
+    Array.isArray(Skills)
+      ? Skills.map((r) => getIDValue.Skills?.(r))
+      : getIDValue.Skills?.(Skills)
   );
   const experienceRecords = useDataStoreBinding({
     type: "collection",
@@ -275,10 +296,15 @@ export default function CompanyCreateForm(props) {
     type: "collection",
     model: Accomplishment,
   }).items;
+  const skillRecords = useDataStoreBinding({
+    type: "collection",
+    model: Skill,
+  }).items;
   const getDisplayValue = {
     historyID: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
     Engagements: (r) => `${r?.client ? r?.client + " - " : ""}${r?.id}`,
     Accomplishments: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
+    Skills: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
   };
   const validations = {
     title: [],
@@ -288,6 +314,7 @@ export default function CompanyCreateForm(props) {
     historyID: [{ type: "Required" }],
     Engagements: [],
     Accomplishments: [],
+    Skills: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -322,6 +349,7 @@ export default function CompanyCreateForm(props) {
           historyID,
           Engagements,
           Accomplishments,
+          Skills,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -392,6 +420,18 @@ export default function CompanyCreateForm(props) {
               return promises;
             }, [])
           );
+          promises.push(
+            ...Skills.reduce((promises, original) => {
+              promises.push(
+                DataStore.save(
+                  Skill.copyOf(original, (updated) => {
+                    updated.companyID = company.id;
+                  })
+                )
+              );
+              return promises;
+            }, [])
+          );
           await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
@@ -424,6 +464,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             value = result?.title ?? value;
@@ -454,6 +495,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             value = result?.role ?? value;
@@ -485,6 +527,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             value = result?.startDate ?? value;
@@ -516,6 +559,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             value = result?.endDate ?? value;
@@ -543,6 +587,7 @@ export default function CompanyCreateForm(props) {
               historyID: value,
               Engagements,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             value = result?.historyID ?? value;
@@ -622,6 +667,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements: values,
               Accomplishments,
+              Skills,
             };
             const result = onChange(modelFields);
             values = result?.Engagements ?? values;
@@ -699,6 +745,7 @@ export default function CompanyCreateForm(props) {
               historyID,
               Engagements,
               Accomplishments: values,
+              Skills,
             };
             const result = onChange(modelFields);
             values = result?.Accomplishments ?? values;
@@ -769,6 +816,82 @@ export default function CompanyCreateForm(props) {
           ref={AccomplishmentsRef}
           labelHidden={true}
           {...getOverrideProps(overrides, "Accomplishments")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        onChange={async (items) => {
+          let values = items;
+          if (onChange) {
+            const modelFields = {
+              title,
+              role,
+              startDate,
+              endDate,
+              historyID,
+              Engagements,
+              Accomplishments,
+              Skills: values,
+            };
+            const result = onChange(modelFields);
+            values = result?.Skills ?? values;
+          }
+          setSkills(values);
+          setCurrentSkillsValue(undefined);
+          setCurrentSkillsDisplayValue("");
+        }}
+        currentFieldValue={currentSkillsValue}
+        label={"Skills"}
+        items={Skills}
+        hasError={errors?.Skills?.hasError}
+        errorMessage={errors?.Skills?.errorMessage}
+        getBadgeText={getDisplayValue.Skills}
+        setFieldValue={(model) => {
+          setCurrentSkillsDisplayValue(getDisplayValue.Skills(model));
+          setCurrentSkillsValue(model);
+        }}
+        inputFieldRef={SkillsRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Skills"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Skill"
+          value={currentSkillsDisplayValue}
+          options={skillRecords
+            .filter((r) => !SkillsIdSet.has(getIDValue.Skills?.(r)))
+            .map((r) => ({
+              id: getIDValue.Skills?.(r),
+              label: getDisplayValue.Skills?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentSkillsValue(
+              skillRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentSkillsDisplayValue(label);
+            runValidationTasks("Skills", label);
+          }}
+          onClear={() => {
+            setCurrentSkillsDisplayValue("");
+          }}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Skills?.hasError) {
+              runValidationTasks("Skills", value);
+            }
+            setCurrentSkillsDisplayValue(value);
+            setCurrentSkillsValue(undefined);
+          }}
+          onBlur={() => runValidationTasks("Skills", currentSkillsDisplayValue)}
+          errorMessage={errors.Skills?.errorMessage}
+          hasError={errors.Skills?.hasError}
+          ref={SkillsRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Skills")}
         ></Autocomplete>
       </ArrayField>
       <Flex

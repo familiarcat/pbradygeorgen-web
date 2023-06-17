@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Engagement, Accomplishment } from "../models";
+import { Engagement, Accomplishment, Skill } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -21,6 +21,7 @@ export declare type CompanyCreateFormInputValues = {
     historyID?: string;
     Engagements?: Engagement[];
     Accomplishments?: Accomplishment[];
+    Skills?: Skill[];
 };
 export declare type CompanyCreateFormValidationValues = {
     title?: ValidationFunction<string>;
@@ -30,6 +31,7 @@ export declare type CompanyCreateFormValidationValues = {
     historyID?: ValidationFunction<string>;
     Engagements?: ValidationFunction<Engagement>;
     Accomplishments?: ValidationFunction<Accomplishment>;
+    Skills?: ValidationFunction<Skill>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CompanyCreateFormOverridesProps = {
@@ -41,6 +43,7 @@ export declare type CompanyCreateFormOverridesProps = {
     historyID?: PrimitiveOverrideProps<AutocompleteProps>;
     Engagements?: PrimitiveOverrideProps<AutocompleteProps>;
     Accomplishments?: PrimitiveOverrideProps<AutocompleteProps>;
+    Skills?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type CompanyCreateFormProps = React.PropsWithChildren<{
     overrides?: CompanyCreateFormOverridesProps | undefined | null;

@@ -8,12 +8,13 @@
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Summary } from "../models";
+import { ContactInformation } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function SummaryCreateForm(props) {
+export default function ContactInformationUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id: idProp,
+    contactInformation: contactInformationModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -23,20 +24,39 @@ export default function SummaryCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    goals: "",
-    persona: "",
+    name: "",
+    email: "",
+    phone: "",
   };
-  const [goals, setGoals] = React.useState(initialValues.goals);
-  const [persona, setPersona] = React.useState(initialValues.persona);
+  const [name, setName] = React.useState(initialValues.name);
+  const [email, setEmail] = React.useState(initialValues.email);
+  const [phone, setPhone] = React.useState(initialValues.phone);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setGoals(initialValues.goals);
-    setPersona(initialValues.persona);
+    const cleanValues = contactInformationRecord
+      ? { ...initialValues, ...contactInformationRecord }
+      : initialValues;
+    setName(cleanValues.name);
+    setEmail(cleanValues.email);
+    setPhone(cleanValues.phone);
     setErrors({});
   };
+  const [contactInformationRecord, setContactInformationRecord] =
+    React.useState(contactInformationModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? await DataStore.query(ContactInformation, idProp)
+        : contactInformationModelProp;
+      setContactInformationRecord(record);
+    };
+    queryData();
+  }, [idProp, contactInformationModelProp]);
+  React.useEffect(resetStateValues, [contactInformationRecord]);
   const validations = {
-    goals: [],
-    persona: [],
+    name: [],
+    email: [],
+    phone: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -64,8 +84,9 @@ export default function SummaryCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          goals,
-          persona,
+          name,
+          email,
+          phone,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -95,12 +116,13 @@ export default function SummaryCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new Summary(modelFields));
+          await DataStore.save(
+            ContactInformation.copyOf(contactInformationRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
+          );
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -108,71 +130,100 @@ export default function SummaryCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "SummaryCreateForm")}
+      {...getOverrideProps(overrides, "ContactInformationUpdateForm")}
       {...rest}
     >
       <TextField
-        label="Goals"
+        label="Name"
         isRequired={false}
         isReadOnly={false}
-        value={goals}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              goals: value,
-              persona,
+              name: value,
+              email,
+              phone,
             };
             const result = onChange(modelFields);
-            value = result?.goals ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.goals?.hasError) {
-            runValidationTasks("goals", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
-          setGoals(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("goals", goals)}
-        errorMessage={errors.goals?.errorMessage}
-        hasError={errors.goals?.hasError}
-        {...getOverrideProps(overrides, "goals")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Persona"
+        label="Email"
         isRequired={false}
         isReadOnly={false}
-        value={persona}
+        value={email}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              goals,
-              persona: value,
+              name,
+              email: value,
+              phone,
             };
             const result = onChange(modelFields);
-            value = result?.persona ?? value;
+            value = result?.email ?? value;
           }
-          if (errors.persona?.hasError) {
-            runValidationTasks("persona", value);
+          if (errors.email?.hasError) {
+            runValidationTasks("email", value);
           }
-          setPersona(value);
+          setEmail(value);
         }}
-        onBlur={() => runValidationTasks("persona", persona)}
-        errorMessage={errors.persona?.errorMessage}
-        hasError={errors.persona?.hasError}
-        {...getOverrideProps(overrides, "persona")}
+        onBlur={() => runValidationTasks("email", email)}
+        errorMessage={errors.email?.errorMessage}
+        hasError={errors.email?.hasError}
+        {...getOverrideProps(overrides, "email")}
+      ></TextField>
+      <TextField
+        label="Phone"
+        isRequired={false}
+        isReadOnly={false}
+        value={phone}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              email,
+              phone: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.phone ?? value;
+          }
+          if (errors.phone?.hasError) {
+            runValidationTasks("phone", value);
+          }
+          setPhone(value);
+        }}
+        onBlur={() => runValidationTasks("phone", phone)}
+        errorMessage={errors.phone?.errorMessage}
+        hasError={errors.phone?.hasError}
+        {...getOverrideProps(overrides, "phone")}
       ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, "ClearButton")}
+          isDisabled={!(idProp || contactInformationModelProp)}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -182,7 +233,10 @@ export default function SummaryCreateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || contactInformationModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

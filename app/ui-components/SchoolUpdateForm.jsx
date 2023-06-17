@@ -23,7 +23,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { School, Degree } from "../models";
+import { School, Degree, Education } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -199,23 +199,35 @@ export default function SchoolUpdateForm(props) {
   const initialValues = {
     name: "",
     Degrees: [],
+    educationID: undefined,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [Degrees, setDegrees] = React.useState(initialValues.Degrees);
+  const [educationID, setEducationID] = React.useState(
+    initialValues.educationID
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = schoolRecord
-      ? { ...initialValues, ...schoolRecord, Degrees: linkedDegrees }
+      ? {
+          ...initialValues,
+          ...schoolRecord,
+          Degrees: linkedDegrees,
+          educationID,
+        }
       : initialValues;
     setName(cleanValues.name);
     setDegrees(cleanValues.Degrees ?? []);
     setCurrentDegreesValue(undefined);
     setCurrentDegreesDisplayValue("");
+    setEducationID(cleanValues.educationID);
+    setCurrentEducationIDValue(undefined);
+    setCurrentEducationIDDisplayValue("");
     setErrors({});
   };
   const [schoolRecord, setSchoolRecord] = React.useState(schoolModelProp);
   const [linkedDegrees, setLinkedDegrees] = React.useState([]);
-  const canUnlinkDegrees = true;
+  const canUnlinkDegrees = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
@@ -224,15 +236,22 @@ export default function SchoolUpdateForm(props) {
       setSchoolRecord(record);
       const linkedDegrees = record ? await record.Degrees.toArray() : [];
       setLinkedDegrees(linkedDegrees);
+      const educationIDRecord = record ? await record.educationID : undefined;
+      setEducationID(educationIDRecord);
     };
     queryData();
   }, [idProp, schoolModelProp]);
-  React.useEffect(resetStateValues, [schoolRecord, linkedDegrees]);
+  React.useEffect(resetStateValues, [schoolRecord, linkedDegrees, educationID]);
   const [currentDegreesDisplayValue, setCurrentDegreesDisplayValue] =
     React.useState("");
   const [currentDegreesValue, setCurrentDegreesValue] =
     React.useState(undefined);
   const DegreesRef = React.createRef();
+  const [currentEducationIDDisplayValue, setCurrentEducationIDDisplayValue] =
+    React.useState("");
+  const [currentEducationIDValue, setCurrentEducationIDValue] =
+    React.useState(undefined);
+  const educationIDRef = React.createRef();
   const getIDValue = {
     Degrees: (r) => JSON.stringify({ id: r?.id }),
   };
@@ -245,12 +264,18 @@ export default function SchoolUpdateForm(props) {
     type: "collection",
     model: Degree,
   }).items;
+  const educationRecords = useDataStoreBinding({
+    type: "collection",
+    model: Education,
+  }).items;
   const getDisplayValue = {
     Degrees: (r) => `${r?.major ? r?.major + " - " : ""}${r?.id}`,
+    educationID: (r) => `${r?.summary ? r?.summary + " - " : ""}${r?.id}`,
   };
   const validations = {
     name: [],
     Degrees: [],
+    educationID: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -280,6 +305,7 @@ export default function SchoolUpdateForm(props) {
         let modelFields = {
           name,
           Degrees,
+          educationID,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -339,13 +365,13 @@ export default function SchoolUpdateForm(props) {
           degreesToUnLink.forEach((original) => {
             if (!canUnlinkDegrees) {
               throw Error(
-                `Degree ${original.id} cannot be unlinked from School because undefined is a required field.`
+                `Degree ${original.id} cannot be unlinked from School because schoolID is a required field.`
               );
             }
             promises.push(
               DataStore.save(
                 Degree.copyOf(original, (updated) => {
-                  updated.School = null;
+                  updated.schoolID = null;
                 })
               )
             );
@@ -354,13 +380,14 @@ export default function SchoolUpdateForm(props) {
             promises.push(
               DataStore.save(
                 Degree.copyOf(original, (updated) => {
-                  updated.School = schoolRecord;
+                  updated.schoolID = schoolRecord.id;
                 })
               )
             );
           });
           const modelFieldsToSave = {
             name: modelFields.name,
+            educationID: modelFields.educationID,
           };
           promises.push(
             DataStore.save(
@@ -393,6 +420,7 @@ export default function SchoolUpdateForm(props) {
             const modelFields = {
               name: value,
               Degrees,
+              educationID,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -414,6 +442,7 @@ export default function SchoolUpdateForm(props) {
             const modelFields = {
               name,
               Degrees: values,
+              educationID,
             };
             const result = onChange(modelFields);
             values = result?.Degrees ?? values;
@@ -477,6 +506,85 @@ export default function SchoolUpdateForm(props) {
           ref={DegreesRef}
           labelHidden={true}
           {...getOverrideProps(overrides, "Degrees")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              name,
+              Degrees,
+              educationID: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.educationID ?? value;
+          }
+          setEducationID(value);
+          setCurrentEducationIDValue(undefined);
+        }}
+        currentFieldValue={currentEducationIDValue}
+        label={"Education id"}
+        items={educationID ? [educationID] : []}
+        hasError={errors?.educationID?.hasError}
+        errorMessage={errors?.educationID?.errorMessage}
+        getBadgeText={(value) =>
+          getDisplayValue.educationID(
+            educationRecords.find((r) => r.id === value)
+          )
+        }
+        setFieldValue={(value) => {
+          setCurrentEducationIDDisplayValue(
+            getDisplayValue.educationID(
+              educationRecords.find((r) => r.id === value)
+            )
+          );
+          setCurrentEducationIDValue(value);
+        }}
+        inputFieldRef={educationIDRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Education id"
+          isRequired={true}
+          isReadOnly={false}
+          placeholder="Search Education"
+          value={currentEducationIDDisplayValue}
+          options={educationRecords
+            .filter(
+              (r, i, arr) =>
+                arr.findIndex((member) => member?.id === r?.id) === i
+            )
+            .map((r) => ({
+              id: r?.id,
+              label: getDisplayValue.educationID?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentEducationIDValue(id);
+            setCurrentEducationIDDisplayValue(label);
+            runValidationTasks("educationID", label);
+          }}
+          onClear={() => {
+            setCurrentEducationIDDisplayValue("");
+          }}
+          defaultValue={educationID}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.educationID?.hasError) {
+              runValidationTasks("educationID", value);
+            }
+            setCurrentEducationIDDisplayValue(value);
+            setCurrentEducationIDValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks("educationID", currentEducationIDValue)
+          }
+          errorMessage={errors.educationID?.errorMessage}
+          hasError={errors.educationID?.hasError}
+          ref={educationIDRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "educationID")}
         ></Autocomplete>
       </ArrayField>
       <Flex

@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Engagement, Skill } from "../models";
+import { Engagement, Accomplishment } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -18,14 +18,14 @@ export declare type EngagementUpdateFormInputValues = {
     startDate?: string;
     endDate?: string;
     companyID?: string;
-    Skills?: Skill[];
+    Accomplishments?: Accomplishment[];
 };
 export declare type EngagementUpdateFormValidationValues = {
     client?: ValidationFunction<string>;
     startDate?: ValidationFunction<string>;
     endDate?: ValidationFunction<string>;
     companyID?: ValidationFunction<string>;
-    Skills?: ValidationFunction<Skill>;
+    Accomplishments?: ValidationFunction<Accomplishment>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type EngagementUpdateFormOverridesProps = {
@@ -34,7 +34,7 @@ export declare type EngagementUpdateFormOverridesProps = {
     startDate?: PrimitiveOverrideProps<TextFieldProps>;
     endDate?: PrimitiveOverrideProps<TextFieldProps>;
     companyID?: PrimitiveOverrideProps<AutocompleteProps>;
-    Skills?: PrimitiveOverrideProps<AutocompleteProps>;
+    Accomplishments?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type EngagementUpdateFormProps = React.PropsWithChildren<{
     overrides?: EngagementUpdateFormOverridesProps | undefined | null;

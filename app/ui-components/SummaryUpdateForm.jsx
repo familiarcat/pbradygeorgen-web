@@ -6,184 +6,11 @@
 
 /* eslint-disable */
 import * as React from "react";
-import {
-  Autocomplete,
-  Badge,
-  Button,
-  Divider,
-  Flex,
-  Grid,
-  Icon,
-  ScrollView,
-  Text,
-  TextField,
-  useTheme,
-} from "@aws-amplify/ui-react";
-import {
-  getOverrideProps,
-  useDataStoreBinding,
-} from "@aws-amplify/ui-react/internal";
-import { Summary, Resume as Resume0 } from "../models";
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Summary } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-function ArrayField({
-  items = [],
-  onChange,
-  label,
-  inputFieldRef,
-  children,
-  hasError,
-  setFieldValue,
-  currentFieldValue,
-  defaultFieldValue,
-  lengthLimit,
-  getBadgeText,
-  errorMessage,
-}) {
-  const labelElement = <Text>{label}</Text>;
-  const {
-    tokens: {
-      components: {
-        fieldmessages: { error: errorStyles },
-      },
-    },
-  } = useTheme();
-  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [isEditing, setIsEditing] = React.useState();
-  React.useEffect(() => {
-    if (isEditing) {
-      inputFieldRef?.current?.focus();
-    }
-  }, [isEditing]);
-  const removeItem = async (removeIndex) => {
-    const newItems = items.filter((value, index) => index !== removeIndex);
-    await onChange(newItems);
-    setSelectedBadgeIndex(undefined);
-  };
-  const addItem = async () => {
-    if (
-      currentFieldValue !== undefined &&
-      currentFieldValue !== null &&
-      currentFieldValue !== "" &&
-      !hasError
-    ) {
-      const newItems = [...items];
-      if (selectedBadgeIndex !== undefined) {
-        newItems[selectedBadgeIndex] = currentFieldValue;
-        setSelectedBadgeIndex(undefined);
-      } else {
-        newItems.push(currentFieldValue);
-      }
-      await onChange(newItems);
-      setIsEditing(false);
-    }
-  };
-  const arraySection = (
-    <React.Fragment>
-      {!!items?.length && (
-        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
-          {items.map((value, index) => {
-            return (
-              <Badge
-                key={index}
-                style={{
-                  cursor: "pointer",
-                  alignItems: "center",
-                  marginRight: 3,
-                  marginTop: 3,
-                  backgroundColor:
-                    index === selectedBadgeIndex ? "#B8CEF9" : "",
-                }}
-                onClick={() => {
-                  setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
-                  setIsEditing(true);
-                }}
-              >
-                {getBadgeText ? getBadgeText(value) : value.toString()}
-                <Icon
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: 3,
-                    width: 20,
-                    height: 20,
-                  }}
-                  viewBox={{ width: 20, height: 20 }}
-                  paths={[
-                    {
-                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
-                      stroke: "black",
-                    },
-                  ]}
-                  ariaLabel="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeItem(index);
-                  }}
-                />
-              </Badge>
-            );
-          })}
-        </ScrollView>
-      )}
-      <Divider orientation="horizontal" marginTop={5} />
-    </React.Fragment>
-  );
-  if (lengthLimit !== undefined && items.length >= lengthLimit && !isEditing) {
-    return (
-      <React.Fragment>
-        {labelElement}
-        {arraySection}
-      </React.Fragment>
-    );
-  }
-  return (
-    <React.Fragment>
-      {labelElement}
-      {isEditing && children}
-      {!isEditing ? (
-        <>
-          <Button
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            Add item
-          </Button>
-          {errorMessage && hasError && (
-            <Text color={errorStyles.color} fontSize={errorStyles.fontSize}>
-              {errorMessage}
-            </Text>
-          )}
-        </>
-      ) : (
-        <Flex justifyContent="flex-end">
-          {(currentFieldValue || isEditing) && (
-            <Button
-              children="Cancel"
-              type="button"
-              size="small"
-              onClick={() => {
-                setFieldValue(defaultFieldValue);
-                setIsEditing(false);
-                setSelectedBadgeIndex(undefined);
-              }}
-            ></Button>
-          )}
-          <Button
-            size="small"
-            variation="link"
-            isDisabled={hasError}
-            onClick={addItem}
-          >
-            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
-          </Button>
-        </Flex>
-      )}
-      {arraySection}
-    </React.Fragment>
-  );
-}
 export default function SummaryUpdateForm(props) {
   const {
     id: idProp,
@@ -197,28 +24,18 @@ export default function SummaryUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    description: "",
-    image: "",
-    header: "",
-    Resume: undefined,
+    goals: "",
+    persona: "",
   };
-  const [description, setDescription] = React.useState(
-    initialValues.description
-  );
-  const [image, setImage] = React.useState(initialValues.image);
-  const [header, setHeader] = React.useState(initialValues.header);
-  const [Resume, setResume] = React.useState(initialValues.Resume);
+  const [goals, setGoals] = React.useState(initialValues.goals);
+  const [persona, setPersona] = React.useState(initialValues.persona);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = summaryRecord
-      ? { ...initialValues, ...summaryRecord, Resume }
+      ? { ...initialValues, ...summaryRecord }
       : initialValues;
-    setDescription(cleanValues.description);
-    setImage(cleanValues.image);
-    setHeader(cleanValues.header);
-    setResume(cleanValues.Resume);
-    setCurrentResumeValue(undefined);
-    setCurrentResumeDisplayValue("");
+    setGoals(cleanValues.goals);
+    setPersona(cleanValues.persona);
     setErrors({});
   };
   const [summaryRecord, setSummaryRecord] = React.useState(summaryModelProp);
@@ -228,36 +45,13 @@ export default function SummaryUpdateForm(props) {
         ? await DataStore.query(Summary, idProp)
         : summaryModelProp;
       setSummaryRecord(record);
-      const ResumeRecord = record ? await record.Resume : undefined;
-      setResume(ResumeRecord);
     };
     queryData();
   }, [idProp, summaryModelProp]);
-  React.useEffect(resetStateValues, [summaryRecord, Resume]);
-  const [currentResumeDisplayValue, setCurrentResumeDisplayValue] =
-    React.useState("");
-  const [currentResumeValue, setCurrentResumeValue] = React.useState(undefined);
-  const ResumeRef = React.createRef();
-  const getIDValue = {
-    Resume: (r) => JSON.stringify({ id: r?.id }),
-  };
-  const ResumeIdSet = new Set(
-    Array.isArray(Resume)
-      ? Resume.map((r) => getIDValue.Resume?.(r))
-      : getIDValue.Resume?.(Resume)
-  );
-  const resumeRecords = useDataStoreBinding({
-    type: "collection",
-    model: Resume0,
-  }).items;
-  const getDisplayValue = {
-    Resume: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
-  };
+  React.useEffect(resetStateValues, [summaryRecord]);
   const validations = {
-    description: [],
-    image: [],
-    header: [],
-    Resume: [],
+    goals: [],
+    persona: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -285,31 +79,21 @@ export default function SummaryUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          description,
-          image,
-          header,
-          Resume,
+          goals,
+          persona,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
             if (Array.isArray(modelFields[fieldName])) {
               promises.push(
                 ...modelFields[fieldName].map((item) =>
-                  runValidationTasks(
-                    fieldName,
-                    item,
-                    getDisplayValue[fieldName]
-                  )
+                  runValidationTasks(fieldName, item)
                 )
               );
               return promises;
             }
             promises.push(
-              runValidationTasks(
-                fieldName,
-                modelFields[fieldName],
-                getDisplayValue[fieldName]
-              )
+              runValidationTasks(fieldName, modelFields[fieldName])
             );
             return promises;
           }, [])
@@ -326,50 +110,11 @@ export default function SummaryUpdateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          const promises = [];
-          const resumeToUnlink = await summaryRecord.Resume;
-          if (resumeToUnlink) {
-            promises.push(
-              DataStore.save(
-                Resume0.copyOf(resumeToUnlink, (updated) => {
-                  updated.Summary = undefined;
-                  updated.resumeSummaryId = undefined;
-                })
-              )
-            );
-          }
-          const resumeToLink = modelFields.Resume;
-          if (resumeToLink) {
-            promises.push(
-              DataStore.save(
-                Resume0.copyOf(resumeToLink, (updated) => {
-                  updated.Summary = summaryRecord;
-                })
-              )
-            );
-            const summaryToUnlink = await resumeToLink.Summary;
-            if (summaryToUnlink) {
-              promises.push(
-                DataStore.save(
-                  Summary.copyOf(summaryToUnlink, (updated) => {
-                    updated.Resume = undefined;
-                    updated.summaryResumeId = undefined;
-                  })
-                )
-              );
-            }
-          }
-          promises.push(
-            DataStore.save(
-              Summary.copyOf(summaryRecord, (updated) => {
-                Object.assign(updated, modelFields);
-                if (!modelFields.Resume) {
-                  updated.summaryResumeId = undefined;
-                }
-              })
-            )
+          await DataStore.save(
+            Summary.copyOf(summaryRecord, (updated) => {
+              Object.assign(updated, modelFields);
+            })
           );
-          await Promise.all(promises);
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -383,160 +128,55 @@ export default function SummaryUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Description"
+        label="Goals"
         isRequired={false}
         isReadOnly={false}
-        value={description}
+        value={goals}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              description: value,
-              image,
-              header,
-              Resume,
+              goals: value,
+              persona,
             };
             const result = onChange(modelFields);
-            value = result?.description ?? value;
+            value = result?.goals ?? value;
           }
-          if (errors.description?.hasError) {
-            runValidationTasks("description", value);
+          if (errors.goals?.hasError) {
+            runValidationTasks("goals", value);
           }
-          setDescription(value);
+          setGoals(value);
         }}
-        onBlur={() => runValidationTasks("description", description)}
-        errorMessage={errors.description?.errorMessage}
-        hasError={errors.description?.hasError}
-        {...getOverrideProps(overrides, "description")}
+        onBlur={() => runValidationTasks("goals", goals)}
+        errorMessage={errors.goals?.errorMessage}
+        hasError={errors.goals?.hasError}
+        {...getOverrideProps(overrides, "goals")}
       ></TextField>
       <TextField
-        label="Image"
+        label="Persona"
         isRequired={false}
         isReadOnly={false}
-        value={image}
+        value={persona}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              description,
-              image: value,
-              header,
-              Resume,
+              goals,
+              persona: value,
             };
             const result = onChange(modelFields);
-            value = result?.image ?? value;
+            value = result?.persona ?? value;
           }
-          if (errors.image?.hasError) {
-            runValidationTasks("image", value);
+          if (errors.persona?.hasError) {
+            runValidationTasks("persona", value);
           }
-          setImage(value);
+          setPersona(value);
         }}
-        onBlur={() => runValidationTasks("image", image)}
-        errorMessage={errors.image?.errorMessage}
-        hasError={errors.image?.hasError}
-        {...getOverrideProps(overrides, "image")}
+        onBlur={() => runValidationTasks("persona", persona)}
+        errorMessage={errors.persona?.errorMessage}
+        hasError={errors.persona?.hasError}
+        {...getOverrideProps(overrides, "persona")}
       ></TextField>
-      <TextField
-        label="Header"
-        isRequired={false}
-        isReadOnly={false}
-        value={header}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              description,
-              image,
-              header: value,
-              Resume,
-            };
-            const result = onChange(modelFields);
-            value = result?.header ?? value;
-          }
-          if (errors.header?.hasError) {
-            runValidationTasks("header", value);
-          }
-          setHeader(value);
-        }}
-        onBlur={() => runValidationTasks("header", header)}
-        errorMessage={errors.header?.errorMessage}
-        hasError={errors.header?.hasError}
-        {...getOverrideProps(overrides, "header")}
-      ></TextField>
-      <ArrayField
-        lengthLimit={1}
-        onChange={async (items) => {
-          let value = items[0];
-          if (onChange) {
-            const modelFields = {
-              description,
-              image,
-              header,
-              Resume: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.Resume ?? value;
-          }
-          setResume(value);
-          setCurrentResumeValue(undefined);
-          setCurrentResumeDisplayValue("");
-        }}
-        currentFieldValue={currentResumeValue}
-        label={"Resume"}
-        items={Resume ? [Resume] : []}
-        hasError={errors?.Resume?.hasError}
-        errorMessage={errors?.Resume?.errorMessage}
-        getBadgeText={getDisplayValue.Resume}
-        setFieldValue={(model) => {
-          setCurrentResumeDisplayValue(getDisplayValue.Resume(model));
-          setCurrentResumeValue(model);
-        }}
-        inputFieldRef={ResumeRef}
-        defaultFieldValue={""}
-      >
-        <Autocomplete
-          label="Resume"
-          isRequired={false}
-          isReadOnly={false}
-          placeholder="Search Resume"
-          value={currentResumeDisplayValue}
-          options={resumeRecords
-            .filter((r) => !ResumeIdSet.has(getIDValue.Resume?.(r)))
-            .map((r) => ({
-              id: getIDValue.Resume?.(r),
-              label: getDisplayValue.Resume?.(r),
-            }))}
-          onSelect={({ id, label }) => {
-            setCurrentResumeValue(
-              resumeRecords.find((r) =>
-                Object.entries(JSON.parse(id)).every(
-                  ([key, value]) => r[key] === value
-                )
-              )
-            );
-            setCurrentResumeDisplayValue(label);
-            runValidationTasks("Resume", label);
-          }}
-          onClear={() => {
-            setCurrentResumeDisplayValue("");
-          }}
-          defaultValue={Resume}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Resume?.hasError) {
-              runValidationTasks("Resume", value);
-            }
-            setCurrentResumeDisplayValue(value);
-            setCurrentResumeValue(undefined);
-          }}
-          onBlur={() => runValidationTasks("Resume", currentResumeDisplayValue)}
-          errorMessage={errors.Resume?.errorMessage}
-          hasError={errors.Resume?.hasError}
-          ref={ResumeRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "Resume")}
-        ></Autocomplete>
-      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

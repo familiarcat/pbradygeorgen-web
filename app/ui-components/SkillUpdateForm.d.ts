@@ -16,22 +16,25 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type SkillUpdateFormInputValues = {
     title?: string;
     link?: string;
-    engagementID?: string;
     resumeID?: string;
+    companyID?: string;
+    accomplishmentID?: string;
 };
 export declare type SkillUpdateFormValidationValues = {
     title?: ValidationFunction<string>;
     link?: ValidationFunction<string>;
-    engagementID?: ValidationFunction<string>;
     resumeID?: ValidationFunction<string>;
+    companyID?: ValidationFunction<string>;
+    accomplishmentID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SkillUpdateFormOverridesProps = {
     SkillUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     title?: PrimitiveOverrideProps<TextFieldProps>;
     link?: PrimitiveOverrideProps<TextFieldProps>;
-    engagementID?: PrimitiveOverrideProps<AutocompleteProps>;
     resumeID?: PrimitiveOverrideProps<AutocompleteProps>;
+    companyID?: PrimitiveOverrideProps<AutocompleteProps>;
+    accomplishmentID?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type SkillUpdateFormProps = React.PropsWithChildren<{
     overrides?: SkillUpdateFormOverridesProps | undefined | null;

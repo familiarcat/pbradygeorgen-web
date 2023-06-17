@@ -6,23 +6,57 @@ import { LazyLoading, LazyLoadingDisabled, AsyncItem, AsyncCollection } from "@a
 
 
 
+type EagerContactInformation = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ContactInformation, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly email?: string | null;
+  readonly phone?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyContactInformation = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ContactInformation, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly email?: string | null;
+  readonly phone?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ContactInformation = LazyLoading extends LazyLoadingDisabled ? EagerContactInformation : LazyContactInformation
+
+export declare const ContactInformation: (new (init: ModelInit<ContactInformation>) => ContactInformation) & {
+  copyOf(source: ContactInformation, mutator: (draft: MutableModel<ContactInformation>) => MutableModel<ContactInformation> | void): ContactInformation;
+}
+
 type EagerResume = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Resume, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly name?: string | null;
-  readonly address?: string | null;
-  readonly phone?: string | null;
   readonly url?: string | null;
   readonly image?: string | null;
   readonly Summary?: Summary | null;
   readonly Skills?: (Skill | null)[] | null;
-  readonly email?: string | null;
+  readonly Education?: Education | null;
+  readonly Experience?: Experience | null;
+  readonly ContactInformation?: ContactInformation | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly resumeSummaryId?: string | null;
+  readonly resumeEducationId?: string | null;
+  readonly resumeExperienceId?: string | null;
+  readonly resumeContactInformationId?: string | null;
 }
 
 type LazyResume = {
@@ -31,59 +65,25 @@ type LazyResume = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly name?: string | null;
-  readonly address?: string | null;
-  readonly phone?: string | null;
   readonly url?: string | null;
   readonly image?: string | null;
   readonly Summary: AsyncItem<Summary | undefined>;
   readonly Skills: AsyncCollection<Skill>;
-  readonly email?: string | null;
+  readonly Education: AsyncItem<Education | undefined>;
+  readonly Experience: AsyncItem<Experience | undefined>;
+  readonly ContactInformation: AsyncItem<ContactInformation | undefined>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly resumeSummaryId?: string | null;
+  readonly resumeEducationId?: string | null;
+  readonly resumeExperienceId?: string | null;
+  readonly resumeContactInformationId?: string | null;
 }
 
 export declare type Resume = LazyLoading extends LazyLoadingDisabled ? EagerResume : LazyResume
 
 export declare const Resume: (new (init: ModelInit<Resume>) => Resume) & {
   copyOf(source: Resume, mutator: (draft: MutableModel<Resume>) => MutableModel<Resume> | void): Resume;
-}
-
-type EagerSummary = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Summary, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly description?: string | null;
-  readonly image?: string | null;
-  readonly header?: string | null;
-  readonly Resume?: Resume | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly summaryResumeId?: string | null;
-}
-
-type LazySummary = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Summary, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly description?: string | null;
-  readonly image?: string | null;
-  readonly header?: string | null;
-  readonly Resume: AsyncItem<Resume | undefined>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly summaryResumeId?: string | null;
-}
-
-export declare type Summary = LazyLoading extends LazyLoadingDisabled ? EagerSummary : LazySummary
-
-export declare const Summary: (new (init: ModelInit<Summary>) => Summary) & {
-  copyOf(source: Summary, mutator: (draft: MutableModel<Summary>) => MutableModel<Summary> | void): Summary;
 }
 
 type EagerEducation = {
@@ -93,7 +93,7 @@ type EagerEducation = {
   };
   readonly id: string;
   readonly summary?: string | null;
-  readonly Degrees?: (Degree | null)[] | null;
+  readonly Schools?: (School | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -105,7 +105,7 @@ type LazyEducation = {
   };
   readonly id: string;
   readonly summary?: string | null;
-  readonly Degrees: AsyncCollection<Degree>;
+  readonly Schools: AsyncCollection<School>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -116,6 +116,120 @@ export declare const Education: (new (init: ModelInit<Education>) => Education) 
   copyOf(source: Education, mutator: (draft: MutableModel<Education>) => MutableModel<Education> | void): Education;
 }
 
+type EagerDegree = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Degree, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly major?: string | null;
+  readonly startYear?: string | null;
+  readonly endYear?: string | null;
+  readonly schoolID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyDegree = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Degree, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly major?: string | null;
+  readonly startYear?: string | null;
+  readonly endYear?: string | null;
+  readonly schoolID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Degree = LazyLoading extends LazyLoadingDisabled ? EagerDegree : LazyDegree
+
+export declare const Degree: (new (init: ModelInit<Degree>) => Degree) & {
+  copyOf(source: Degree, mutator: (draft: MutableModel<Degree>) => MutableModel<Degree> | void): Degree;
+}
+
+type EagerCompany = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Company, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly role?: string | null;
+  readonly startDate?: string | null;
+  readonly endDate?: string | null;
+  readonly historyID: string;
+  readonly Engagements?: (Engagement | null)[] | null;
+  readonly Accomplishments?: (Accomplishment | null)[] | null;
+  readonly Skills?: (Skill | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCompany = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Company, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly role?: string | null;
+  readonly startDate?: string | null;
+  readonly endDate?: string | null;
+  readonly historyID: string;
+  readonly Engagements: AsyncCollection<Engagement>;
+  readonly Accomplishments: AsyncCollection<Accomplishment>;
+  readonly Skills: AsyncCollection<Skill>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Company = LazyLoading extends LazyLoadingDisabled ? EagerCompany : LazyCompany
+
+export declare const Company: (new (init: ModelInit<Company>) => Company) & {
+  copyOf(source: Company, mutator: (draft: MutableModel<Company>) => MutableModel<Company> | void): Company;
+}
+
+type EagerAccomplishment = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Accomplishment, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly link?: string | null;
+  readonly engagementID: string;
+  readonly companyID: string;
+  readonly Skills?: (Skill | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyAccomplishment = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Accomplishment, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly title?: string | null;
+  readonly description?: string | null;
+  readonly link?: string | null;
+  readonly engagementID: string;
+  readonly companyID: string;
+  readonly Skills: AsyncCollection<Skill>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Accomplishment = LazyLoading extends LazyLoadingDisabled ? EagerAccomplishment : LazyAccomplishment
+
+export declare const Accomplishment: (new (init: ModelInit<Accomplishment>) => Accomplishment) & {
+  copyOf(source: Accomplishment, mutator: (draft: MutableModel<Accomplishment>) => MutableModel<Accomplishment> | void): Accomplishment;
+}
+
 type EagerSchool = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<School, 'id'>;
@@ -124,6 +238,7 @@ type EagerSchool = {
   readonly id: string;
   readonly name?: string | null;
   readonly Degrees?: (Degree | null)[] | null;
+  readonly educationID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -136,6 +251,7 @@ type LazySchool = {
   readonly id: string;
   readonly name?: string | null;
   readonly Degrees: AsyncCollection<Degree>;
+  readonly educationID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -178,42 +294,40 @@ export declare const Experience: (new (init: ModelInit<Experience>) => Experienc
   copyOf(source: Experience, mutator: (draft: MutableModel<Experience>) => MutableModel<Experience> | void): Experience;
 }
 
-type EagerDegree = {
+type EagerSkill = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Degree, 'id'>;
+    identifier: ManagedIdentifier<Skill, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly major?: string | null;
-  readonly startYear?: string | null;
-  readonly endYear?: string | null;
-  readonly educationID: string;
-  readonly schoolID: string;
-  readonly School?: School | null;
+  readonly title?: string | null;
+  readonly link?: string | null;
+  readonly resumeID: string;
+  readonly companyID: string;
+  readonly accomplishmentID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyDegree = {
+type LazySkill = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Degree, 'id'>;
+    identifier: ManagedIdentifier<Skill, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly major?: string | null;
-  readonly startYear?: string | null;
-  readonly endYear?: string | null;
-  readonly educationID: string;
-  readonly schoolID: string;
-  readonly School: AsyncItem<School | undefined>;
+  readonly title?: string | null;
+  readonly link?: string | null;
+  readonly resumeID: string;
+  readonly companyID: string;
+  readonly accomplishmentID: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type Degree = LazyLoading extends LazyLoadingDisabled ? EagerDegree : LazyDegree
+export declare type Skill = LazyLoading extends LazyLoadingDisabled ? EagerSkill : LazySkill
 
-export declare const Degree: (new (init: ModelInit<Degree>) => Degree) & {
-  copyOf(source: Degree, mutator: (draft: MutableModel<Degree>) => MutableModel<Degree> | void): Degree;
+export declare const Skill: (new (init: ModelInit<Skill>) => Skill) & {
+  copyOf(source: Skill, mutator: (draft: MutableModel<Skill>) => MutableModel<Skill> | void): Skill;
 }
 
 type EagerEngagement = {
@@ -226,7 +340,7 @@ type EagerEngagement = {
   readonly startDate?: string | null;
   readonly endDate?: string | null;
   readonly companyID: string;
-  readonly Skills?: (Skill | null)[] | null;
+  readonly Accomplishments?: (Accomplishment | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -241,7 +355,7 @@ type LazyEngagement = {
   readonly startDate?: string | null;
   readonly endDate?: string | null;
   readonly companyID: string;
-  readonly Skills: AsyncCollection<Skill>;
+  readonly Accomplishments: AsyncCollection<Accomplishment>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -252,114 +366,32 @@ export declare const Engagement: (new (init: ModelInit<Engagement>) => Engagemen
   copyOf(source: Engagement, mutator: (draft: MutableModel<Engagement>) => MutableModel<Engagement> | void): Engagement;
 }
 
-type EagerCompany = {
+type EagerSummary = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Company, 'id'>;
+    identifier: ManagedIdentifier<Summary, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly title?: string | null;
-  readonly role?: string | null;
-  readonly startDate?: string | null;
-  readonly endDate?: string | null;
-  readonly historyID: string;
-  readonly Engagements?: (Engagement | null)[] | null;
-  readonly Accomplishments?: (Accomplishment | null)[] | null;
+  readonly goals?: string | null;
+  readonly persona?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-type LazyCompany = {
+type LazySummary = {
   readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Company, 'id'>;
+    identifier: ManagedIdentifier<Summary, 'id'>;
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly title?: string | null;
-  readonly role?: string | null;
-  readonly startDate?: string | null;
-  readonly endDate?: string | null;
-  readonly historyID: string;
-  readonly Engagements: AsyncCollection<Engagement>;
-  readonly Accomplishments: AsyncCollection<Accomplishment>;
+  readonly goals?: string | null;
+  readonly persona?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
-export declare type Company = LazyLoading extends LazyLoadingDisabled ? EagerCompany : LazyCompany
+export declare type Summary = LazyLoading extends LazyLoadingDisabled ? EagerSummary : LazySummary
 
-export declare const Company: (new (init: ModelInit<Company>) => Company) & {
-  copyOf(source: Company, mutator: (draft: MutableModel<Company>) => MutableModel<Company> | void): Company;
-}
-
-type EagerSkill = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Skill, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly title?: string | null;
-  readonly link?: string | null;
-  readonly engagementID: string;
-  readonly resumeID: string;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-type LazySkill = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Skill, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly title?: string | null;
-  readonly link?: string | null;
-  readonly engagementID: string;
-  readonly resumeID: string;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-}
-
-export declare type Skill = LazyLoading extends LazyLoadingDisabled ? EagerSkill : LazySkill
-
-export declare const Skill: (new (init: ModelInit<Skill>) => Skill) & {
-  copyOf(source: Skill, mutator: (draft: MutableModel<Skill>) => MutableModel<Skill> | void): Skill;
-}
-
-type EagerAccomplishment = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Accomplishment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly title?: string | null;
-  readonly description?: string | null;
-  readonly link?: string | null;
-  readonly companyID: string;
-  readonly Engagement?: Engagement | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly accomplishmentEngagementId?: string | null;
-}
-
-type LazyAccomplishment = {
-  readonly [__modelMeta__]: {
-    identifier: ManagedIdentifier<Accomplishment, 'id'>;
-    readOnlyFields: 'createdAt' | 'updatedAt';
-  };
-  readonly id: string;
-  readonly title?: string | null;
-  readonly description?: string | null;
-  readonly link?: string | null;
-  readonly companyID: string;
-  readonly Engagement: AsyncItem<Engagement | undefined>;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  readonly accomplishmentEngagementId?: string | null;
-}
-
-export declare type Accomplishment = LazyLoading extends LazyLoadingDisabled ? EagerAccomplishment : LazyAccomplishment
-
-export declare const Accomplishment: (new (init: ModelInit<Accomplishment>) => Accomplishment) & {
-  copyOf(source: Accomplishment, mutator: (draft: MutableModel<Accomplishment>) => MutableModel<Accomplishment> | void): Accomplishment;
+export declare const Summary: (new (init: ModelInit<Summary>) => Summary) & {
+  copyOf(source: Summary, mutator: (draft: MutableModel<Summary>) => MutableModel<Summary> | void): Summary;
 }

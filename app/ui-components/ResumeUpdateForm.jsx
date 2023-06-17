@@ -23,7 +23,14 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Resume, Summary as Summary0, Skill } from "../models";
+import {
+  Resume,
+  Summary as Summary0,
+  Skill,
+  Education as Education0,
+  Experience as Experience0,
+  ContactInformation as ContactInformation0,
+} from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -197,31 +204,36 @@ export default function ResumeUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: "",
-    address: "",
-    phone: "",
     url: "",
     image: "",
     Summary: undefined,
     Skills: [],
-    email: "",
+    Education: undefined,
+    Experience: undefined,
+    ContactInformation: undefined,
   };
-  const [name, setName] = React.useState(initialValues.name);
-  const [address, setAddress] = React.useState(initialValues.address);
-  const [phone, setPhone] = React.useState(initialValues.phone);
   const [url, setUrl] = React.useState(initialValues.url);
   const [image, setImage] = React.useState(initialValues.image);
   const [Summary, setSummary] = React.useState(initialValues.Summary);
   const [Skills, setSkills] = React.useState(initialValues.Skills);
-  const [email, setEmail] = React.useState(initialValues.email);
+  const [Education, setEducation] = React.useState(initialValues.Education);
+  const [Experience, setExperience] = React.useState(initialValues.Experience);
+  const [ContactInformation, setContactInformation] = React.useState(
+    initialValues.ContactInformation
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = resumeRecord
-      ? { ...initialValues, ...resumeRecord, Summary, Skills: linkedSkills }
+      ? {
+          ...initialValues,
+          ...resumeRecord,
+          Summary,
+          Skills: linkedSkills,
+          Education,
+          Experience,
+          ContactInformation,
+        }
       : initialValues;
-    setName(cleanValues.name);
-    setAddress(cleanValues.address);
-    setPhone(cleanValues.phone);
     setUrl(cleanValues.url);
     setImage(cleanValues.image);
     setSummary(cleanValues.Summary);
@@ -230,7 +242,15 @@ export default function ResumeUpdateForm(props) {
     setSkills(cleanValues.Skills ?? []);
     setCurrentSkillsValue(undefined);
     setCurrentSkillsDisplayValue("");
-    setEmail(cleanValues.email);
+    setEducation(cleanValues.Education);
+    setCurrentEducationValue(undefined);
+    setCurrentEducationDisplayValue("");
+    setExperience(cleanValues.Experience);
+    setCurrentExperienceValue(undefined);
+    setCurrentExperienceDisplayValue("");
+    setContactInformation(cleanValues.ContactInformation);
+    setCurrentContactInformationValue(undefined);
+    setCurrentContactInformationDisplayValue("");
     setErrors({});
   };
   const [resumeRecord, setResumeRecord] = React.useState(resumeModelProp);
@@ -246,10 +266,25 @@ export default function ResumeUpdateForm(props) {
       setSummary(SummaryRecord);
       const linkedSkills = record ? await record.Skills.toArray() : [];
       setLinkedSkills(linkedSkills);
+      const EducationRecord = record ? await record.Education : undefined;
+      setEducation(EducationRecord);
+      const ExperienceRecord = record ? await record.Experience : undefined;
+      setExperience(ExperienceRecord);
+      const ContactInformationRecord = record
+        ? await record.ContactInformation
+        : undefined;
+      setContactInformation(ContactInformationRecord);
     };
     queryData();
   }, [idProp, resumeModelProp]);
-  React.useEffect(resetStateValues, [resumeRecord, Summary, linkedSkills]);
+  React.useEffect(resetStateValues, [
+    resumeRecord,
+    Summary,
+    linkedSkills,
+    Education,
+    Experience,
+    ContactInformation,
+  ]);
   const [currentSummaryDisplayValue, setCurrentSummaryDisplayValue] =
     React.useState("");
   const [currentSummaryValue, setCurrentSummaryValue] =
@@ -259,9 +294,29 @@ export default function ResumeUpdateForm(props) {
     React.useState("");
   const [currentSkillsValue, setCurrentSkillsValue] = React.useState(undefined);
   const SkillsRef = React.createRef();
+  const [currentEducationDisplayValue, setCurrentEducationDisplayValue] =
+    React.useState("");
+  const [currentEducationValue, setCurrentEducationValue] =
+    React.useState(undefined);
+  const EducationRef = React.createRef();
+  const [currentExperienceDisplayValue, setCurrentExperienceDisplayValue] =
+    React.useState("");
+  const [currentExperienceValue, setCurrentExperienceValue] =
+    React.useState(undefined);
+  const ExperienceRef = React.createRef();
+  const [
+    currentContactInformationDisplayValue,
+    setCurrentContactInformationDisplayValue,
+  ] = React.useState("");
+  const [currentContactInformationValue, setCurrentContactInformationValue] =
+    React.useState(undefined);
+  const ContactInformationRef = React.createRef();
   const getIDValue = {
     Summary: (r) => JSON.stringify({ id: r?.id }),
     Skills: (r) => JSON.stringify({ id: r?.id }),
+    Education: (r) => JSON.stringify({ id: r?.id }),
+    Experience: (r) => JSON.stringify({ id: r?.id }),
+    ContactInformation: (r) => JSON.stringify({ id: r?.id }),
   };
   const SummaryIdSet = new Set(
     Array.isArray(Summary)
@@ -273,6 +328,21 @@ export default function ResumeUpdateForm(props) {
       ? Skills.map((r) => getIDValue.Skills?.(r))
       : getIDValue.Skills?.(Skills)
   );
+  const EducationIdSet = new Set(
+    Array.isArray(Education)
+      ? Education.map((r) => getIDValue.Education?.(r))
+      : getIDValue.Education?.(Education)
+  );
+  const ExperienceIdSet = new Set(
+    Array.isArray(Experience)
+      ? Experience.map((r) => getIDValue.Experience?.(r))
+      : getIDValue.Experience?.(Experience)
+  );
+  const ContactInformationIdSet = new Set(
+    Array.isArray(ContactInformation)
+      ? ContactInformation.map((r) => getIDValue.ContactInformation?.(r))
+      : getIDValue.ContactInformation?.(ContactInformation)
+  );
   const summaryRecords = useDataStoreBinding({
     type: "collection",
     model: Summary0,
@@ -281,19 +351,33 @@ export default function ResumeUpdateForm(props) {
     type: "collection",
     model: Skill,
   }).items;
+  const educationRecords = useDataStoreBinding({
+    type: "collection",
+    model: Education0,
+  }).items;
+  const experienceRecords = useDataStoreBinding({
+    type: "collection",
+    model: Experience0,
+  }).items;
+  const contactInformationRecords = useDataStoreBinding({
+    type: "collection",
+    model: ContactInformation0,
+  }).items;
   const getDisplayValue = {
-    Summary: (r) => `${r?.description ? r?.description + " - " : ""}${r?.id}`,
+    Summary: (r) => `${r?.goals ? r?.goals + " - " : ""}${r?.id}`,
     Skills: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
+    Education: (r) => `${r?.summary ? r?.summary + " - " : ""}${r?.id}`,
+    Experience: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
+    ContactInformation: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
   };
   const validations = {
-    name: [],
-    address: [],
-    phone: [],
     url: [],
     image: [],
     Summary: [],
     Skills: [],
-    email: [],
+    Education: [],
+    Experience: [],
+    ContactInformation: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -321,14 +405,13 @@ export default function ResumeUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name,
-          address,
-          phone,
           url,
           image,
           Summary,
           Skills,
-          email,
+          Education,
+          Experience,
+          ContactInformation,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -367,38 +450,6 @@ export default function ResumeUpdateForm(props) {
             }
           });
           const promises = [];
-          const summaryToUnlink = await resumeRecord.Summary;
-          if (summaryToUnlink) {
-            promises.push(
-              DataStore.save(
-                Summary0.copyOf(summaryToUnlink, (updated) => {
-                  updated.Resume = undefined;
-                  updated.summaryResumeId = undefined;
-                })
-              )
-            );
-          }
-          const summaryToLink = modelFields.Summary;
-          if (summaryToLink) {
-            promises.push(
-              DataStore.save(
-                Summary0.copyOf(summaryToLink, (updated) => {
-                  updated.Resume = resumeRecord;
-                })
-              )
-            );
-            const resumeToUnlink = await summaryToLink.Resume;
-            if (resumeToUnlink) {
-              promises.push(
-                DataStore.save(
-                  Resume.copyOf(resumeToUnlink, (updated) => {
-                    updated.Summary = undefined;
-                    updated.resumeSummaryId = undefined;
-                  })
-                )
-              );
-            }
-          }
           const skillsToLink = [];
           const skillsToUnLink = [];
           const skillsSet = new Set();
@@ -441,13 +492,12 @@ export default function ResumeUpdateForm(props) {
             );
           });
           const modelFieldsToSave = {
-            name: modelFields.name,
-            address: modelFields.address,
-            phone: modelFields.phone,
             url: modelFields.url,
             image: modelFields.image,
             Summary: modelFields.Summary,
-            email: modelFields.email,
+            Education: modelFields.Education,
+            Experience: modelFields.Experience,
+            ContactInformation: modelFields.ContactInformation,
           };
           promises.push(
             DataStore.save(
@@ -455,6 +505,15 @@ export default function ResumeUpdateForm(props) {
                 Object.assign(updated, modelFieldsToSave);
                 if (!modelFieldsToSave.Summary) {
                   updated.resumeSummaryId = undefined;
+                }
+                if (!modelFieldsToSave.Education) {
+                  updated.resumeEducationId = undefined;
+                }
+                if (!modelFieldsToSave.Experience) {
+                  updated.resumeExperienceId = undefined;
+                }
+                if (!modelFieldsToSave.ContactInformation) {
+                  updated.resumeContactInformationId = undefined;
                 }
               })
             )
@@ -473,99 +532,6 @@ export default function ResumeUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="Name"
-        isRequired={false}
-        isReadOnly={false}
-        value={name}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name: value,
-              address,
-              phone,
-              url,
-              image,
-              Summary,
-              Skills,
-              email,
-            };
-            const result = onChange(modelFields);
-            value = result?.name ?? value;
-          }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
-          }
-          setName(value);
-        }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
-      ></TextField>
-      <TextField
-        label="Address"
-        isRequired={false}
-        isReadOnly={false}
-        value={address}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address: value,
-              phone,
-              url,
-              image,
-              Summary,
-              Skills,
-              email,
-            };
-            const result = onChange(modelFields);
-            value = result?.address ?? value;
-          }
-          if (errors.address?.hasError) {
-            runValidationTasks("address", value);
-          }
-          setAddress(value);
-        }}
-        onBlur={() => runValidationTasks("address", address)}
-        errorMessage={errors.address?.errorMessage}
-        hasError={errors.address?.hasError}
-        {...getOverrideProps(overrides, "address")}
-      ></TextField>
-      <TextField
-        label="Phone"
-        isRequired={false}
-        isReadOnly={false}
-        value={phone}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              address,
-              phone: value,
-              url,
-              image,
-              Summary,
-              Skills,
-              email,
-            };
-            const result = onChange(modelFields);
-            value = result?.phone ?? value;
-          }
-          if (errors.phone?.hasError) {
-            runValidationTasks("phone", value);
-          }
-          setPhone(value);
-        }}
-        onBlur={() => runValidationTasks("phone", phone)}
-        errorMessage={errors.phone?.errorMessage}
-        hasError={errors.phone?.hasError}
-        {...getOverrideProps(overrides, "phone")}
-      ></TextField>
-      <TextField
         label="Url"
         isRequired={false}
         isReadOnly={false}
@@ -574,14 +540,13 @@ export default function ResumeUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              phone,
               url: value,
               image,
               Summary,
               Skills,
-              email,
+              Education,
+              Experience,
+              ContactInformation,
             };
             const result = onChange(modelFields);
             value = result?.url ?? value;
@@ -605,14 +570,13 @@ export default function ResumeUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              phone,
               url,
               image: value,
               Summary,
               Skills,
-              email,
+              Education,
+              Experience,
+              ContactInformation,
             };
             const result = onChange(modelFields);
             value = result?.image ?? value;
@@ -633,14 +597,13 @@ export default function ResumeUpdateForm(props) {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              phone,
               url,
               image,
               Summary: value,
               Skills,
-              email,
+              Education,
+              Experience,
+              ContactInformation,
             };
             const result = onChange(modelFields);
             value = result?.Summary ?? value;
@@ -712,14 +675,13 @@ export default function ResumeUpdateForm(props) {
           let values = items;
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              phone,
               url,
               image,
               Summary,
               Skills: values,
-              email,
+              Education,
+              Experience,
+              ContactInformation,
             };
             const result = onChange(modelFields);
             values = result?.Skills ?? values;
@@ -783,37 +745,251 @@ export default function ResumeUpdateForm(props) {
           {...getOverrideProps(overrides, "Skills")}
         ></Autocomplete>
       </ArrayField>
-      <TextField
-        label="Email"
-        isRequired={false}
-        isReadOnly={false}
-        value={email}
-        onChange={(e) => {
-          let { value } = e.target;
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
           if (onChange) {
             const modelFields = {
-              name,
-              address,
-              phone,
               url,
               image,
               Summary,
               Skills,
-              email: value,
+              Education: value,
+              Experience,
+              ContactInformation,
             };
             const result = onChange(modelFields);
-            value = result?.email ?? value;
+            value = result?.Education ?? value;
           }
-          if (errors.email?.hasError) {
-            runValidationTasks("email", value);
-          }
-          setEmail(value);
+          setEducation(value);
+          setCurrentEducationValue(undefined);
+          setCurrentEducationDisplayValue("");
         }}
-        onBlur={() => runValidationTasks("email", email)}
-        errorMessage={errors.email?.errorMessage}
-        hasError={errors.email?.hasError}
-        {...getOverrideProps(overrides, "email")}
-      ></TextField>
+        currentFieldValue={currentEducationValue}
+        label={"Education"}
+        items={Education ? [Education] : []}
+        hasError={errors?.Education?.hasError}
+        errorMessage={errors?.Education?.errorMessage}
+        getBadgeText={getDisplayValue.Education}
+        setFieldValue={(model) => {
+          setCurrentEducationDisplayValue(getDisplayValue.Education(model));
+          setCurrentEducationValue(model);
+        }}
+        inputFieldRef={EducationRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Education"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Education"
+          value={currentEducationDisplayValue}
+          options={educationRecords
+            .filter((r) => !EducationIdSet.has(getIDValue.Education?.(r)))
+            .map((r) => ({
+              id: getIDValue.Education?.(r),
+              label: getDisplayValue.Education?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentEducationValue(
+              educationRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentEducationDisplayValue(label);
+            runValidationTasks("Education", label);
+          }}
+          onClear={() => {
+            setCurrentEducationDisplayValue("");
+          }}
+          defaultValue={Education}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Education?.hasError) {
+              runValidationTasks("Education", value);
+            }
+            setCurrentEducationDisplayValue(value);
+            setCurrentEducationValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks("Education", currentEducationDisplayValue)
+          }
+          errorMessage={errors.Education?.errorMessage}
+          hasError={errors.Education?.hasError}
+          ref={EducationRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Education")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              url,
+              image,
+              Summary,
+              Skills,
+              Education,
+              Experience: value,
+              ContactInformation,
+            };
+            const result = onChange(modelFields);
+            value = result?.Experience ?? value;
+          }
+          setExperience(value);
+          setCurrentExperienceValue(undefined);
+          setCurrentExperienceDisplayValue("");
+        }}
+        currentFieldValue={currentExperienceValue}
+        label={"Experience"}
+        items={Experience ? [Experience] : []}
+        hasError={errors?.Experience?.hasError}
+        errorMessage={errors?.Experience?.errorMessage}
+        getBadgeText={getDisplayValue.Experience}
+        setFieldValue={(model) => {
+          setCurrentExperienceDisplayValue(getDisplayValue.Experience(model));
+          setCurrentExperienceValue(model);
+        }}
+        inputFieldRef={ExperienceRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Experience"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search Experience"
+          value={currentExperienceDisplayValue}
+          options={experienceRecords
+            .filter((r) => !ExperienceIdSet.has(getIDValue.Experience?.(r)))
+            .map((r) => ({
+              id: getIDValue.Experience?.(r),
+              label: getDisplayValue.Experience?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentExperienceValue(
+              experienceRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentExperienceDisplayValue(label);
+            runValidationTasks("Experience", label);
+          }}
+          onClear={() => {
+            setCurrentExperienceDisplayValue("");
+          }}
+          defaultValue={Experience}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.Experience?.hasError) {
+              runValidationTasks("Experience", value);
+            }
+            setCurrentExperienceDisplayValue(value);
+            setCurrentExperienceValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks("Experience", currentExperienceDisplayValue)
+          }
+          errorMessage={errors.Experience?.errorMessage}
+          hasError={errors.Experience?.hasError}
+          ref={ExperienceRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "Experience")}
+        ></Autocomplete>
+      </ArrayField>
+      <ArrayField
+        lengthLimit={1}
+        onChange={async (items) => {
+          let value = items[0];
+          if (onChange) {
+            const modelFields = {
+              url,
+              image,
+              Summary,
+              Skills,
+              Education,
+              Experience,
+              ContactInformation: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.ContactInformation ?? value;
+          }
+          setContactInformation(value);
+          setCurrentContactInformationValue(undefined);
+          setCurrentContactInformationDisplayValue("");
+        }}
+        currentFieldValue={currentContactInformationValue}
+        label={"Contact information"}
+        items={ContactInformation ? [ContactInformation] : []}
+        hasError={errors?.ContactInformation?.hasError}
+        errorMessage={errors?.ContactInformation?.errorMessage}
+        getBadgeText={getDisplayValue.ContactInformation}
+        setFieldValue={(model) => {
+          setCurrentContactInformationDisplayValue(
+            getDisplayValue.ContactInformation(model)
+          );
+          setCurrentContactInformationValue(model);
+        }}
+        inputFieldRef={ContactInformationRef}
+        defaultFieldValue={""}
+      >
+        <Autocomplete
+          label="Contact information"
+          isRequired={false}
+          isReadOnly={false}
+          placeholder="Search ContactInformation"
+          value={currentContactInformationDisplayValue}
+          options={contactInformationRecords
+            .filter(
+              (r) =>
+                !ContactInformationIdSet.has(getIDValue.ContactInformation?.(r))
+            )
+            .map((r) => ({
+              id: getIDValue.ContactInformation?.(r),
+              label: getDisplayValue.ContactInformation?.(r),
+            }))}
+          onSelect={({ id, label }) => {
+            setCurrentContactInformationValue(
+              contactInformationRecords.find((r) =>
+                Object.entries(JSON.parse(id)).every(
+                  ([key, value]) => r[key] === value
+                )
+              )
+            );
+            setCurrentContactInformationDisplayValue(label);
+            runValidationTasks("ContactInformation", label);
+          }}
+          onClear={() => {
+            setCurrentContactInformationDisplayValue("");
+          }}
+          defaultValue={ContactInformation}
+          onChange={(e) => {
+            let { value } = e.target;
+            if (errors.ContactInformation?.hasError) {
+              runValidationTasks("ContactInformation", value);
+            }
+            setCurrentContactInformationDisplayValue(value);
+            setCurrentContactInformationValue(undefined);
+          }}
+          onBlur={() =>
+            runValidationTasks(
+              "ContactInformation",
+              currentContactInformationDisplayValue
+            )
+          }
+          errorMessage={errors.ContactInformation?.errorMessage}
+          hasError={errors.ContactInformation?.hasError}
+          ref={ContactInformationRef}
+          labelHidden={true}
+          {...getOverrideProps(overrides, "ContactInformation")}
+        ></Autocomplete>
+      </ArrayField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

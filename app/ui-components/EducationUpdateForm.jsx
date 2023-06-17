@@ -23,7 +23,7 @@ import {
   getOverrideProps,
   useDataStoreBinding,
 } from "@aws-amplify/ui-react/internal";
-import { Education, Degree } from "../models";
+import { Education, School } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -198,60 +198,60 @@ export default function EducationUpdateForm(props) {
   } = props;
   const initialValues = {
     summary: "",
-    Degrees: [],
+    Schools: [],
   };
   const [summary, setSummary] = React.useState(initialValues.summary);
-  const [Degrees, setDegrees] = React.useState(initialValues.Degrees);
+  const [Schools, setSchools] = React.useState(initialValues.Schools);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = educationRecord
-      ? { ...initialValues, ...educationRecord, Degrees: linkedDegrees }
+      ? { ...initialValues, ...educationRecord, Schools: linkedSchools }
       : initialValues;
     setSummary(cleanValues.summary);
-    setDegrees(cleanValues.Degrees ?? []);
-    setCurrentDegreesValue(undefined);
-    setCurrentDegreesDisplayValue("");
+    setSchools(cleanValues.Schools ?? []);
+    setCurrentSchoolsValue(undefined);
+    setCurrentSchoolsDisplayValue("");
     setErrors({});
   };
   const [educationRecord, setEducationRecord] =
     React.useState(educationModelProp);
-  const [linkedDegrees, setLinkedDegrees] = React.useState([]);
-  const canUnlinkDegrees = false;
+  const [linkedSchools, setLinkedSchools] = React.useState([]);
+  const canUnlinkSchools = false;
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
         ? await DataStore.query(Education, idProp)
         : educationModelProp;
       setEducationRecord(record);
-      const linkedDegrees = record ? await record.Degrees.toArray() : [];
-      setLinkedDegrees(linkedDegrees);
+      const linkedSchools = record ? await record.Schools.toArray() : [];
+      setLinkedSchools(linkedSchools);
     };
     queryData();
   }, [idProp, educationModelProp]);
-  React.useEffect(resetStateValues, [educationRecord, linkedDegrees]);
-  const [currentDegreesDisplayValue, setCurrentDegreesDisplayValue] =
+  React.useEffect(resetStateValues, [educationRecord, linkedSchools]);
+  const [currentSchoolsDisplayValue, setCurrentSchoolsDisplayValue] =
     React.useState("");
-  const [currentDegreesValue, setCurrentDegreesValue] =
+  const [currentSchoolsValue, setCurrentSchoolsValue] =
     React.useState(undefined);
-  const DegreesRef = React.createRef();
+  const SchoolsRef = React.createRef();
   const getIDValue = {
-    Degrees: (r) => JSON.stringify({ id: r?.id }),
+    Schools: (r) => JSON.stringify({ id: r?.id }),
   };
-  const DegreesIdSet = new Set(
-    Array.isArray(Degrees)
-      ? Degrees.map((r) => getIDValue.Degrees?.(r))
-      : getIDValue.Degrees?.(Degrees)
+  const SchoolsIdSet = new Set(
+    Array.isArray(Schools)
+      ? Schools.map((r) => getIDValue.Schools?.(r))
+      : getIDValue.Schools?.(Schools)
   );
-  const degreeRecords = useDataStoreBinding({
+  const schoolRecords = useDataStoreBinding({
     type: "collection",
-    model: Degree,
+    model: School,
   }).items;
   const getDisplayValue = {
-    Degrees: (r) => `${r?.major ? r?.major + " - " : ""}${r?.id}`,
+    Schools: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
   };
   const validations = {
     summary: [],
-    Degrees: [],
+    Schools: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -280,7 +280,7 @@ export default function EducationUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           summary,
-          Degrees,
+          Schools,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -319,42 +319,42 @@ export default function EducationUpdateForm(props) {
             }
           });
           const promises = [];
-          const degreesToLink = [];
-          const degreesToUnLink = [];
-          const degreesSet = new Set();
-          const linkedDegreesSet = new Set();
-          Degrees.forEach((r) => degreesSet.add(getIDValue.Degrees?.(r)));
-          linkedDegrees.forEach((r) =>
-            linkedDegreesSet.add(getIDValue.Degrees?.(r))
+          const schoolsToLink = [];
+          const schoolsToUnLink = [];
+          const schoolsSet = new Set();
+          const linkedSchoolsSet = new Set();
+          Schools.forEach((r) => schoolsSet.add(getIDValue.Schools?.(r)));
+          linkedSchools.forEach((r) =>
+            linkedSchoolsSet.add(getIDValue.Schools?.(r))
           );
-          linkedDegrees.forEach((r) => {
-            if (!degreesSet.has(getIDValue.Degrees?.(r))) {
-              degreesToUnLink.push(r);
+          linkedSchools.forEach((r) => {
+            if (!schoolsSet.has(getIDValue.Schools?.(r))) {
+              schoolsToUnLink.push(r);
             }
           });
-          Degrees.forEach((r) => {
-            if (!linkedDegreesSet.has(getIDValue.Degrees?.(r))) {
-              degreesToLink.push(r);
+          Schools.forEach((r) => {
+            if (!linkedSchoolsSet.has(getIDValue.Schools?.(r))) {
+              schoolsToLink.push(r);
             }
           });
-          degreesToUnLink.forEach((original) => {
-            if (!canUnlinkDegrees) {
+          schoolsToUnLink.forEach((original) => {
+            if (!canUnlinkSchools) {
               throw Error(
-                `Degree ${original.id} cannot be unlinked from Education because educationID is a required field.`
+                `School ${original.id} cannot be unlinked from Education because educationID is a required field.`
               );
             }
             promises.push(
               DataStore.save(
-                Degree.copyOf(original, (updated) => {
+                School.copyOf(original, (updated) => {
                   updated.educationID = null;
                 })
               )
             );
           });
-          degreesToLink.forEach((original) => {
+          schoolsToLink.forEach((original) => {
             promises.push(
               DataStore.save(
-                Degree.copyOf(original, (updated) => {
+                School.copyOf(original, (updated) => {
                   updated.educationID = educationRecord.id;
                 })
               )
@@ -393,7 +393,7 @@ export default function EducationUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               summary: value,
-              Degrees,
+              Schools,
             };
             const result = onChange(modelFields);
             value = result?.summary ?? value;
@@ -414,70 +414,70 @@ export default function EducationUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               summary,
-              Degrees: values,
+              Schools: values,
             };
             const result = onChange(modelFields);
-            values = result?.Degrees ?? values;
+            values = result?.Schools ?? values;
           }
-          setDegrees(values);
-          setCurrentDegreesValue(undefined);
-          setCurrentDegreesDisplayValue("");
+          setSchools(values);
+          setCurrentSchoolsValue(undefined);
+          setCurrentSchoolsDisplayValue("");
         }}
-        currentFieldValue={currentDegreesValue}
-        label={"Degrees"}
-        items={Degrees}
-        hasError={errors?.Degrees?.hasError}
-        errorMessage={errors?.Degrees?.errorMessage}
-        getBadgeText={getDisplayValue.Degrees}
+        currentFieldValue={currentSchoolsValue}
+        label={"Schools"}
+        items={Schools}
+        hasError={errors?.Schools?.hasError}
+        errorMessage={errors?.Schools?.errorMessage}
+        getBadgeText={getDisplayValue.Schools}
         setFieldValue={(model) => {
-          setCurrentDegreesDisplayValue(getDisplayValue.Degrees(model));
-          setCurrentDegreesValue(model);
+          setCurrentSchoolsDisplayValue(getDisplayValue.Schools(model));
+          setCurrentSchoolsValue(model);
         }}
-        inputFieldRef={DegreesRef}
+        inputFieldRef={SchoolsRef}
         defaultFieldValue={""}
       >
         <Autocomplete
-          label="Degrees"
+          label="Schools"
           isRequired={false}
           isReadOnly={false}
-          placeholder="Search Degree"
-          value={currentDegreesDisplayValue}
-          options={degreeRecords
-            .filter((r) => !DegreesIdSet.has(getIDValue.Degrees?.(r)))
+          placeholder="Search School"
+          value={currentSchoolsDisplayValue}
+          options={schoolRecords
+            .filter((r) => !SchoolsIdSet.has(getIDValue.Schools?.(r)))
             .map((r) => ({
-              id: getIDValue.Degrees?.(r),
-              label: getDisplayValue.Degrees?.(r),
+              id: getIDValue.Schools?.(r),
+              label: getDisplayValue.Schools?.(r),
             }))}
           onSelect={({ id, label }) => {
-            setCurrentDegreesValue(
-              degreeRecords.find((r) =>
+            setCurrentSchoolsValue(
+              schoolRecords.find((r) =>
                 Object.entries(JSON.parse(id)).every(
                   ([key, value]) => r[key] === value
                 )
               )
             );
-            setCurrentDegreesDisplayValue(label);
-            runValidationTasks("Degrees", label);
+            setCurrentSchoolsDisplayValue(label);
+            runValidationTasks("Schools", label);
           }}
           onClear={() => {
-            setCurrentDegreesDisplayValue("");
+            setCurrentSchoolsDisplayValue("");
           }}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.Degrees?.hasError) {
-              runValidationTasks("Degrees", value);
+            if (errors.Schools?.hasError) {
+              runValidationTasks("Schools", value);
             }
-            setCurrentDegreesDisplayValue(value);
-            setCurrentDegreesValue(undefined);
+            setCurrentSchoolsDisplayValue(value);
+            setCurrentSchoolsValue(undefined);
           }}
           onBlur={() =>
-            runValidationTasks("Degrees", currentDegreesDisplayValue)
+            runValidationTasks("Schools", currentSchoolsDisplayValue)
           }
-          errorMessage={errors.Degrees?.errorMessage}
-          hasError={errors.Degrees?.hasError}
-          ref={DegreesRef}
+          errorMessage={errors.Schools?.errorMessage}
+          hasError={errors.Schools?.hasError}
+          ref={SchoolsRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "Degrees")}
+          {...getOverrideProps(overrides, "Schools")}
         ></Autocomplete>
       </ArrayField>
       <Flex

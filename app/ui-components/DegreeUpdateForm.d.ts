@@ -7,7 +7,7 @@
 import * as React from "react";
 import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Degree, School as School0 } from "../models";
+import { Degree } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -17,15 +17,13 @@ export declare type DegreeUpdateFormInputValues = {
     major?: string;
     startYear?: string;
     endYear?: string;
-    educationID?: string;
-    School?: School0;
+    schoolID?: string;
 };
 export declare type DegreeUpdateFormValidationValues = {
     major?: ValidationFunction<string>;
     startYear?: ValidationFunction<string>;
     endYear?: ValidationFunction<string>;
-    educationID?: ValidationFunction<string>;
-    School?: ValidationFunction<School0>;
+    schoolID?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type DegreeUpdateFormOverridesProps = {
@@ -33,8 +31,7 @@ export declare type DegreeUpdateFormOverridesProps = {
     major?: PrimitiveOverrideProps<TextFieldProps>;
     startYear?: PrimitiveOverrideProps<TextFieldProps>;
     endYear?: PrimitiveOverrideProps<TextFieldProps>;
-    educationID?: PrimitiveOverrideProps<AutocompleteProps>;
-    School?: PrimitiveOverrideProps<AutocompleteProps>;
+    schoolID?: PrimitiveOverrideProps<AutocompleteProps>;
 } & EscapeHatchProps;
 export declare type DegreeUpdateFormProps = React.PropsWithChildren<{
     overrides?: DegreeUpdateFormOverridesProps | undefined | null;

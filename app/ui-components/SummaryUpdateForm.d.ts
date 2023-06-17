@@ -5,33 +5,27 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { Summary, Resume as Resume0 } from "../models";
+import { Summary } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type SummaryUpdateFormInputValues = {
-    description?: string;
-    image?: string;
-    header?: string;
-    Resume?: Resume0;
+    goals?: string;
+    persona?: string;
 };
 export declare type SummaryUpdateFormValidationValues = {
-    description?: ValidationFunction<string>;
-    image?: ValidationFunction<string>;
-    header?: ValidationFunction<string>;
-    Resume?: ValidationFunction<Resume0>;
+    goals?: ValidationFunction<string>;
+    persona?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type SummaryUpdateFormOverridesProps = {
     SummaryUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    description?: PrimitiveOverrideProps<TextFieldProps>;
-    image?: PrimitiveOverrideProps<TextFieldProps>;
-    header?: PrimitiveOverrideProps<TextFieldProps>;
-    Resume?: PrimitiveOverrideProps<AutocompleteProps>;
+    goals?: PrimitiveOverrideProps<TextFieldProps>;
+    persona?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type SummaryUpdateFormProps = React.PropsWithChildren<{
     overrides?: SummaryUpdateFormOverridesProps | undefined | null;
