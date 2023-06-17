@@ -254,7 +254,7 @@ export default function SkillCreateForm(props) {
     model: Accomplishment,
   }).items;
   const getDisplayValue = {
-    resumeID: (r) => `${r?.url ? r?.url + " - " : ""}${r?.id}`,
+    resumeID: (r) => r?.id,
     companyID: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
     accomplishmentID: (r) => `${r?.title ? r?.title + " - " : ""}${r?.id}`,
   };

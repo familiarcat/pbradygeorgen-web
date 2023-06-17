@@ -16,7 +16,6 @@ import {
   Icon,
   ScrollView,
   Text,
-  TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
 import {
@@ -203,16 +202,12 @@ export default function ResumeCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    url: "",
-    image: "",
     Summary: undefined,
     Skills: [],
     Education: undefined,
     Experience: undefined,
     ContactInformation: undefined,
   };
-  const [url, setUrl] = React.useState(initialValues.url);
-  const [image, setImage] = React.useState(initialValues.image);
   const [Summary, setSummary] = React.useState(initialValues.Summary);
   const [Skills, setSkills] = React.useState(initialValues.Skills);
   const [Education, setEducation] = React.useState(initialValues.Education);
@@ -222,8 +217,6 @@ export default function ResumeCreateForm(props) {
   );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUrl(initialValues.url);
-    setImage(initialValues.image);
     setSummary(initialValues.Summary);
     setCurrentSummaryValue(undefined);
     setCurrentSummaryDisplayValue("");
@@ -327,8 +320,6 @@ export default function ResumeCreateForm(props) {
     ContactInformation: (r) => `${r?.name ? r?.name + " - " : ""}${r?.id}`,
   };
   const validations = {
-    url: [],
-    image: [],
     Summary: [],
     Skills: [],
     Education: [],
@@ -361,8 +352,6 @@ export default function ResumeCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          url,
-          image,
           Summary,
           Skills,
           Education,
@@ -406,8 +395,6 @@ export default function ResumeCreateForm(props) {
             }
           });
           const modelFieldsToSave = {
-            url: modelFields.url,
-            image: modelFields.image,
             Summary: modelFields.Summary,
             Education: modelFields.Education,
             Experience: modelFields.Experience,
@@ -443,74 +430,12 @@ export default function ResumeCreateForm(props) {
       {...getOverrideProps(overrides, "ResumeCreateForm")}
       {...rest}
     >
-      <TextField
-        label="Url"
-        isRequired={false}
-        isReadOnly={false}
-        value={url}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              url: value,
-              image,
-              Summary,
-              Skills,
-              Education,
-              Experience,
-              ContactInformation,
-            };
-            const result = onChange(modelFields);
-            value = result?.url ?? value;
-          }
-          if (errors.url?.hasError) {
-            runValidationTasks("url", value);
-          }
-          setUrl(value);
-        }}
-        onBlur={() => runValidationTasks("url", url)}
-        errorMessage={errors.url?.errorMessage}
-        hasError={errors.url?.hasError}
-        {...getOverrideProps(overrides, "url")}
-      ></TextField>
-      <TextField
-        label="Image"
-        isRequired={false}
-        isReadOnly={false}
-        value={image}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              url,
-              image: value,
-              Summary,
-              Skills,
-              Education,
-              Experience,
-              ContactInformation,
-            };
-            const result = onChange(modelFields);
-            value = result?.image ?? value;
-          }
-          if (errors.image?.hasError) {
-            runValidationTasks("image", value);
-          }
-          setImage(value);
-        }}
-        onBlur={() => runValidationTasks("image", image)}
-        errorMessage={errors.image?.errorMessage}
-        hasError={errors.image?.hasError}
-        {...getOverrideProps(overrides, "image")}
-      ></TextField>
       <ArrayField
         lengthLimit={1}
         onChange={async (items) => {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              url,
-              image,
               Summary: value,
               Skills,
               Education,
@@ -586,8 +511,6 @@ export default function ResumeCreateForm(props) {
           let values = items;
           if (onChange) {
             const modelFields = {
-              url,
-              image,
               Summary,
               Skills: values,
               Education,
@@ -662,8 +585,6 @@ export default function ResumeCreateForm(props) {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              url,
-              image,
               Summary,
               Skills,
               Education: value,
@@ -740,8 +661,6 @@ export default function ResumeCreateForm(props) {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              url,
-              image,
               Summary,
               Skills,
               Education,
@@ -818,8 +737,6 @@ export default function ResumeCreateForm(props) {
           let value = items[0];
           if (onChange) {
             const modelFields = {
-              url,
-              image,
               Summary,
               Skills,
               Education,

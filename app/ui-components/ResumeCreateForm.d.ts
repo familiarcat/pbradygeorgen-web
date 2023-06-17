@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { AutocompleteProps, GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { AutocompleteProps, GridProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Summary as Summary0, Skill, Education as Education0, Experience as Experience0, ContactInformation as ContactInformation0 } from "../models";
 export declare type ValidationResponse = {
@@ -14,8 +14,6 @@ export declare type ValidationResponse = {
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type ResumeCreateFormInputValues = {
-    url?: string;
-    image?: string;
     Summary?: Summary0;
     Skills?: Skill[];
     Education?: Education0;
@@ -23,8 +21,6 @@ export declare type ResumeCreateFormInputValues = {
     ContactInformation?: ContactInformation0;
 };
 export declare type ResumeCreateFormValidationValues = {
-    url?: ValidationFunction<string>;
-    image?: ValidationFunction<string>;
     Summary?: ValidationFunction<Summary0>;
     Skills?: ValidationFunction<Skill>;
     Education?: ValidationFunction<Education0>;
@@ -34,8 +30,6 @@ export declare type ResumeCreateFormValidationValues = {
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ResumeCreateFormOverridesProps = {
     ResumeCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
-    url?: PrimitiveOverrideProps<TextFieldProps>;
-    image?: PrimitiveOverrideProps<TextFieldProps>;
     Summary?: PrimitiveOverrideProps<AutocompleteProps>;
     Skills?: PrimitiveOverrideProps<AutocompleteProps>;
     Education?: PrimitiveOverrideProps<AutocompleteProps>;

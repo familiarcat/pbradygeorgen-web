@@ -44,8 +44,6 @@ type EagerResume = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly url?: string | null;
-  readonly image?: string | null;
   readonly Summary?: Summary | null;
   readonly Skills?: (Skill | null)[] | null;
   readonly Education?: Education | null;
@@ -65,8 +63,6 @@ type LazyResume = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
-  readonly url?: string | null;
-  readonly image?: string | null;
   readonly Summary: AsyncItem<Summary | undefined>;
   readonly Skills: AsyncCollection<Skill>;
   readonly Education: AsyncItem<Education | undefined>;
@@ -374,6 +370,8 @@ type EagerSummary = {
   readonly id: string;
   readonly goals?: string | null;
   readonly persona?: string | null;
+  readonly url?: string | null;
+  readonly headshot?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -386,6 +384,8 @@ type LazySummary = {
   readonly id: string;
   readonly goals?: string | null;
   readonly persona?: string | null;
+  readonly url?: string | null;
+  readonly headshot?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

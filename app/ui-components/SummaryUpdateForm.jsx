@@ -26,9 +26,13 @@ export default function SummaryUpdateForm(props) {
   const initialValues = {
     goals: "",
     persona: "",
+    url: "",
+    headshot: "",
   };
   const [goals, setGoals] = React.useState(initialValues.goals);
   const [persona, setPersona] = React.useState(initialValues.persona);
+  const [url, setUrl] = React.useState(initialValues.url);
+  const [headshot, setHeadshot] = React.useState(initialValues.headshot);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = summaryRecord
@@ -36,6 +40,8 @@ export default function SummaryUpdateForm(props) {
       : initialValues;
     setGoals(cleanValues.goals);
     setPersona(cleanValues.persona);
+    setUrl(cleanValues.url);
+    setHeadshot(cleanValues.headshot);
     setErrors({});
   };
   const [summaryRecord, setSummaryRecord] = React.useState(summaryModelProp);
@@ -52,6 +58,8 @@ export default function SummaryUpdateForm(props) {
   const validations = {
     goals: [],
     persona: [],
+    url: [],
+    headshot: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -81,6 +89,8 @@ export default function SummaryUpdateForm(props) {
         let modelFields = {
           goals,
           persona,
+          url,
+          headshot,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -138,6 +148,8 @@ export default function SummaryUpdateForm(props) {
             const modelFields = {
               goals: value,
               persona,
+              url,
+              headshot,
             };
             const result = onChange(modelFields);
             value = result?.goals ?? value;
@@ -163,6 +175,8 @@ export default function SummaryUpdateForm(props) {
             const modelFields = {
               goals,
               persona: value,
+              url,
+              headshot,
             };
             const result = onChange(modelFields);
             value = result?.persona ?? value;
@@ -176,6 +190,60 @@ export default function SummaryUpdateForm(props) {
         errorMessage={errors.persona?.errorMessage}
         hasError={errors.persona?.hasError}
         {...getOverrideProps(overrides, "persona")}
+      ></TextField>
+      <TextField
+        label="Url"
+        isRequired={false}
+        isReadOnly={false}
+        value={url}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              goals,
+              persona,
+              url: value,
+              headshot,
+            };
+            const result = onChange(modelFields);
+            value = result?.url ?? value;
+          }
+          if (errors.url?.hasError) {
+            runValidationTasks("url", value);
+          }
+          setUrl(value);
+        }}
+        onBlur={() => runValidationTasks("url", url)}
+        errorMessage={errors.url?.errorMessage}
+        hasError={errors.url?.hasError}
+        {...getOverrideProps(overrides, "url")}
+      ></TextField>
+      <TextField
+        label="Headshot"
+        isRequired={false}
+        isReadOnly={false}
+        value={headshot}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              goals,
+              persona,
+              url,
+              headshot: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.headshot ?? value;
+          }
+          if (errors.headshot?.hasError) {
+            runValidationTasks("headshot", value);
+          }
+          setHeadshot(value);
+        }}
+        onBlur={() => runValidationTasks("headshot", headshot)}
+        errorMessage={errors.headshot?.errorMessage}
+        hasError={errors.headshot?.hasError}
+        {...getOverrideProps(overrides, "headshot")}
       ></TextField>
       <Flex
         justifyContent="space-between"
